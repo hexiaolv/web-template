@@ -16,7 +16,7 @@ const { UMI_ENV = 'dev' } = process.env;
  */
 const PUBLIC_PATH: string = '/';
 
-export default defineConfig({
+const umiConfig: ReturnType<typeof defineConfig> = defineConfig({
   alias: {
     '@root': join(__dirname, '..'),
   },
@@ -202,3 +202,5 @@ export default defineConfig({
     'process.env.CF_PAGES_COMMIT_SHA': process.env.CF_PAGES_COMMIT_SHA || '',
   },
 });
+
+export default umiConfig;

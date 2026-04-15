@@ -1,0 +1,8 @@
+allowBuilds:
+  '@antv/l7-react': true
+  '@scarf/scarf': true
+  core-js: true
+  core-js-pure: true
+  es5-ext: true
+  esbuild: true
+  unrs-resolver: true
