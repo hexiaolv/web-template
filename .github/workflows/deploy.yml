@@ -32,13 +32,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Set BASE_PATH For GitHub Pages
-        run: echo "BASE_PATH=/${{ github.event.repository.name }}/" >> $GITHUB_ENV
-
-      - name: Build Project
-        run: cross-env UMI_ENV=prod pnpm build
+      - name: Build Project for GitHub Pages
+        run: pnpm build
         env:
           NODE_OPTIONS: --max_old_space_size=4096
+          PUBLIC_PATH: /${{ github.event.repository.name }}/
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
