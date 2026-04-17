@@ -18,6 +18,7 @@ yarn-error.log
 .idea
 yarn.lock
 package-lock.json
+# pnpm-lock.yaml 应该提交到版本控制
 *bak
 .vscode
 

@@ -1,0 +1,94 @@
+# Umi Max 参考（AI 优化版）
+
+> Umi Max 4 核心 API 精华摘录，供 AI 快速查阅。
+
+## 核心导入
+
+```typescript
+import {
+  // 路由
+  history, useNavigate, useParams, useLocation, useSearchParams, Link,
+  // 状态
+  useModel, useAccess,
+  // 请求
+  useRequest, request,
+  // 国际化
+  useIntl, FormattedMessage, setLocale, getLocale,
+  // 初始状态
+  useInitialState,
+} from '@umijs/max';
+```
+
+## 路由跳转
+
+```typescript
+// 命令式
+history.push('/path');
+history.push({ pathname: '/path', search: '?id=1' });
+history.replace('/path');
+history.back();
+
+// 声明式
+const navigate = useNavigate();
+navigate('/path');
+navigate(-1);  // 返回
+```
+
+## 请求
+
+```typescript
+// useRequest（自动管理 loading、data、error）
+const { data, loading, refresh, run } = useRequest(fetchUser, {
+  manual: false,           // false = 自动执行
+  defaultParams: [{ id: 1 }],
+  onSuccess: (data) => {},
+  onError: (err) => {},
+});
+
+// 手动调用
+await run(params);
+refresh();  // 重新请求
+```
+
+## 全局状态
+
+```typescript
+// 读取 initialState
+const { initialState, setInitialState } = useInitialState();
+const { currentUser } = initialState;
+
+// 更新 initialState
+await setInitialState((s) => ({ ...s, currentUser: newUser }));
+```
+
+## 权限
+
+```typescript
+const access = useAccess();
+// access.canAdmin  access.canUser
+
+// 组件中
+{access.canAdmin && <AdminPanel />}
+```
+
+## 国际化
+
+```typescript
+const intl = useIntl();
+intl.formatMessage({ id: 'menu.home' });
+intl.formatMessage({ id: 'common.count' }, { count: 100 });
+
+// JSX
+<FormattedMessage id="menu.home" />
+```
+
+## Mock 配置
+
+```typescript
+// src/pages/xxx/_mock.ts
+export default {
+  'GET /api/users': { data: [], success: true, total: 0 },
+  'POST /api/users': (req, res) => res.json({ success: true }),
+  'DELETE /api/users/:id': { success: true },
+};
+```

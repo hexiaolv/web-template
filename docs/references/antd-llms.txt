@@ -1,0 +1,73 @@
+# Ant Design 设计系统参考（AI 优化版）
+
+> 此文件为 Ant Design 设计令牌和组件使用的精华摘录，供 AI 快速查阅。
+
+## 核心 Design Token
+
+```typescript
+// 语义化 token（推荐使用）
+colorPrimary         // 主色 #1890ff
+colorSuccess         // 成功 #52c41a
+colorWarning         // 警告 #faad14
+colorError           // 错误 #f5222d
+colorTextBase        // 基础文字
+colorBgContainer     // 容器背景
+borderRadius         // 圆角 6px
+fontSize             // 基础字号 14px
+```
+
+## 常用组件属性速查
+
+### Button
+```tsx
+<Button type="primary|default|dashed|link|text" danger ghost loading disabled>
+```
+
+### Form（ProForm）
+```tsx
+<ProForm layout="horizontal|vertical|inline" labelAlign="right|left">
+  <ProFormText name rules label placeholder />
+  <ProFormSelect name options valueEnum />
+  <ProFormDatePicker name />
+</ProForm>
+```
+
+### Table（ProTable）
+```tsx
+<ProTable
+  columns={[{
+    title, dataIndex,
+    valueType: 'text|dateTime|money|select|option',
+    valueEnum: { key: { text, status: 'Default|Processing|Success|Error|Warning' } },
+    hideInSearch, hideInTable, ellipsis, copyable, sorter, width
+  }]}
+  request={async (params, sort, filter) => ({ data, success, total })}
+  rowKey="id"
+/>
+```
+
+### Modal / Drawer
+```tsx
+<Modal open onOk onCancel title width centered destroyOnClose>
+<Drawer open onClose title width placement="right|left|top|bottom">
+```
+
+## 消息提示
+
+```typescript
+message.success('操作成功');
+message.error('操作失败');
+message.warning('请注意');
+message.loading('处理中...');
+
+notification.success({ message: '标题', description: '详情' });
+```
+
+## 图标命名规律
+
+- `XxxOutlined`：线框风格（菜单、按钮常用）
+- `XxxFilled`：实心风格
+- `XxxTwoTone`：双色风格
+
+常用：`UserOutlined PlusOutlined DeleteOutlined EditOutlined SearchOutlined`
+`DownloadOutlined UploadOutlined SettingOutlined CloseOutlined CheckOutlined`
