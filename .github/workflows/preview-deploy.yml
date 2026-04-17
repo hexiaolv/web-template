@@ -1,0 +1,102 @@
+name: Preview Deploy
+
+on:
+  workflow_run:
+    workflows: ['Preview Build']
+    types:
+      - completed
+
+permissions:
+  contents: read
+
+jobs:
+  success:
+    permissions:
+      actions: read
+      issues: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: Download PR artifact
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          name: pr
+
+      - name: Save PR id
+        id: pr
+        run: |
+          PR_ID=$(<pr-id.txt)
+          if [[ ! "$PR_ID" =~ ^[0-9]+$ ]]; then
+            echo "Invalid PR ID: $PR_ID"
+            exit 1
+          fi
+          echo "id=$PR_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Download dist artifact
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          workflow_conclusion: success
+          name: dist
+
+      - name: Extract artifacts
+        run: |
+          tar -xzvf dist-preview.tar.gz
+          rm dist-preview.tar.gz
+
+      - name: Deploy Surge preview
+        id: deploy
+        run: |
+          export DEPLOY_DOMAIN=https://${{ github.event.repository.name }}-pr-${{ steps.pr.outputs.id }}.surge.sh
+          npx surge --project ./dist --domain $DEPLOY_DOMAIN --token ${{ secrets.SURGE_TOKEN }}
+
+      - name: Update Status Comment
+        uses: actions-cool/maintain-one-comment@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            🎊 PR Preview has been successfully built and deployed to: 
+            https://${{ github.event.repository.name }}-pr-${{ steps.pr.outputs.id }}.surge.sh
+
+            *(注意：这个网页由 Surge.sh 临时托管，可能需要科学上网或受限于部署服务)*
+
+            <!-- Sticky Pull Request Comment -->
+          body-include: '<!-- Sticky Pull Request Comment -->'
+          number: ${{ steps.pr.outputs.id }}
+
+  failed:
+    permissions:
+      actions: read
+      issues: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'failure'
+    steps:
+      - name: Download PR artifact
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          name: pr
+
+      - name: Save PR id
+        id: pr
+        run: |
+          PR_ID=$(<pr-id.txt)
+          if [[ ! "$PR_ID" =~ ^[0-9]+$ ]]; then
+            echo "Invalid PR ID: $PR_ID"
+            exit 1
+          fi
+          echo "id=$PR_ID" >> "$GITHUB_OUTPUT"
+
+      - name: The job failed
+        uses: actions-cool/maintain-one-comment@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            😭 Deploy PR Preview failed. 测试和编译发生错误，请排查 Actions Logs。
+
+            <!-- Sticky Pull Request Comment -->
+          body-include: '<!-- Sticky Pull Request Comment -->'
+          number: ${{ steps.pr.outputs.id }}

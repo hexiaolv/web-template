@@ -37,9 +37,17 @@ jobs:
       - name: Type Check (TSC)
         run: pnpm tsc
 
-      - name: Run Tests (Jest)
-        run: pnpm test --passWithNoTests
+      - name: Run Tests (Jest) with Coverage
+        run: pnpm test:coverage --passWithNoTests
         # 使用 --passWithNoTests 避免在尚未全部补齐测试用例时构建失败
+        
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: ${{ github.repository }}
 
       - name: Build Project
         run: pnpm build
+        env:
+          NODE_OPTIONS: --max_old_space_size=4096
