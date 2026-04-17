@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check code formatting & linting (Biome)
+        run: pnpm biome:lint
+
+      - name: Type Check (TSC)
+        run: pnpm tsc
+
+      - name: Run Tests (Jest)
+        run: pnpm test --passWithNoTests
+        # 使用 --passWithNoTests 避免在尚未全部补齐测试用例时构建失败
+
+      - name: Build Project
+        run: pnpm build

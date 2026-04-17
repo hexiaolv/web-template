@@ -1,4 +1,4 @@
-﻿import { defaultConfig } from 'antd/lib/theme/internal';
+import { defaultConfig } from 'antd/lib/theme/internal';
 
 defaultConfig.hashed = false;
 
@@ -95,15 +95,34 @@ Object.defineProperty(global.window.console, 'error', {
   writable: true,
   configurable: true,
   value: (...rest) => {
-    const logStr = rest.join('');
+    const logStr = rest.map(r => typeof r === 'string' ? r : (r && r.stack ? r.stack : String(r))).join(' ');
     if (
-      logStr.includes(
-        'Warning: An update to %s inside a test was not wrapped in act(...)',
-      )
+      logStr.includes('Warning: An update to ') ||
+      logStr.includes('useLayoutEffect does nothing on the server') ||
+      logStr.includes('recursivelyTraverseLayoutEffects') ||
+      logStr.includes('commitLayoutEffectOnFiber') ||
+      logStr.includes('act(...)')
     ) {
       return;
     }
     errorLog(...rest);
+  },
+});
+
+const warnLog = console.warn;
+Object.defineProperty(global.window.console, 'warn', {
+  writable: true,
+  configurable: true,
+  value: (...rest) => {
+    const logStr = rest.map(r => typeof r === 'string' ? r : (r && r.stack ? r.stack : String(r))).join(' ');
+    if (
+      logStr.includes('useLayoutEffect does nothing on the server') ||
+      logStr.includes('recursivelyTraverseLayoutEffects') ||
+      logStr.includes('commitLayoutEffectOnFiber')
+    ) {
+      return;
+    }
+    warnLog(...rest);
   },
 });
 

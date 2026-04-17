@@ -13,6 +13,7 @@ Ant Design Pro 企业级脚手架模板。React 19 + Umi Max 4 + Ant Design 6。
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | 技术架构、目录结构、核心配置 |
 | [docs/FRONTEND.md](./docs/FRONTEND.md) | 组件规范、状态管理、API 调用模式 |
 | [docs/DESIGN.md](./docs/DESIGN.md) | 设计系统、色彩、间距、组件使用规范 |
+| [docs/TESTING.md](./docs/TESTING.md) | 统一的自动化测试用例开发规范与指南 |
 | [docs/PLANS.md](./docs/PLANS.md) | 当前迭代计划，执行前必读 |
 | [docs/SECURITY.md](./docs/SECURITY.md) | 鉴权、权限、数据安全规范 |
 | [docs/design-docs/core-beliefs.md](./docs/design-docs/core-beliefs.md) | 工程核心决策与背后原因 |
