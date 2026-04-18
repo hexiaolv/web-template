@@ -20,7 +20,6 @@ Ant Design Pro 企业级脚手架模板。React 19 + Umi Max 4 + Ant Design 6。
 
 ## 关键规则（违反需说明原因）
 
-- 包管理器：**仅 pnpm**，禁止 npm/yarn
 - API 调用：**仅 Umi request**，禁止 fetch/axios
 - 类型：**禁止 any**，导入用 `import type`
 - 样式：**禁止硬编码颜色**，用主题 token 或 Tailwind 工具类
@@ -29,12 +28,12 @@ Ant Design Pro 企业级脚手架模板。React 19 + Umi Max 4 + Ant Design 6。
 ## 常用命令
 
 ```bash
-pnpm dev       # 启动（无 Mock，端口 3000）
-pnpm start     # 启动（带 Mock）
-pnpm build     # 构建
-pnpm biome     # 格式化修复
-pnpm tsc       # 类型检查
-pnpm test      # 测试
+npm run dev       # 启动（无 Mock，端口 3000）
+npm run start     # 启动（带 Mock）
+npm run build     # 构建
+npm run biome     # 格式化修复
+npm run tsc       # 类型检查
+npm run test      # 测试
 ```
 
 ## 新增页面：最短路径
@@ -60,6 +59,6 @@ src/pages/<name>/_mock.ts
 | 问题 | 解决 |
 |------|------|
 | 端口占用 | 修改 `package.json` 的 `PORT` |
-| Umi 缓存 | `rm -rf src/.umi && pnpm dev` |
-| 类型缺失 | `max setup` |
-| 依赖失败 | `pnpm store prune && rm -rf node_modules && pnpm install` |
+| Umi 缓存 | `rm -rf src/.umi && npm run dev` |
+| 类型缺失 | `npx max setup` |
+| 依赖失败 | `rm -rf node_modules && npm install` |
