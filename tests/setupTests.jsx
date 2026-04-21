@@ -1,4 +1,4 @@
-﻿import { defaultConfig } from 'antd/lib/theme/internal';
+import { defaultConfig } from 'antd/lib/theme/internal';
 
 defaultConfig.hashed = false;
 
@@ -96,11 +96,7 @@ Object.defineProperty(global.window.console, 'error', {
   configurable: true,
   value: (...rest) => {
     const logStr = rest.join('');
-    if (
-      logStr.includes(
-        'Warning: An update to %s inside a test was not wrapped in act(...)',
-      )
-    ) {
+    if (logStr.includes('wrapped in act(...)')) {
       return;
     }
     errorLog(...rest);

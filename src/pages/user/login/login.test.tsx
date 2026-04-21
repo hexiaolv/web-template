@@ -1,4 +1,3 @@
-﻿// @ts-ignore
 import { startMock } from '@@/requestRecordMock';
 import { TestBrowser } from '@@/testBrowser';
 import { fireEvent, render } from '@testing-library/react';
@@ -86,7 +85,10 @@ describe('Login Page', () => {
       fireEvent.change(passwordInput, { target: { value: 'ant.design' } });
     });
 
-    await (await rootContainer.findByText('Login')).click();
+    const loginButton = await rootContainer.findByText('Login');
+    await act(async () => {
+      fireEvent.click(loginButton);
+    });
 
     // 等待接口返回结果
     await waitTime(5000);

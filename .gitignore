@@ -49,3 +49,5 @@ build
 
 # cloudflare wrangler
 .wrangler
+
+.pnpm-store
