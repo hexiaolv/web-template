@@ -23,7 +23,10 @@ const loginPath = '/user/login';
  * @see https://umijs.org/docs/api/runtime-config#getinitialstate
  * */
 export async function getInitialState(): Promise<{
-  settings?: Partial<LayoutSettings> & { tabsLayout?: boolean };
+  settings?: Partial<LayoutSettings> & {
+    tabsLayout?: boolean;
+    homeTabPath?: string;
+  };
   currentUser?: API.CurrentUser;
   loading?: boolean;
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;

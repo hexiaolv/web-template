@@ -131,10 +131,19 @@
   min-width: 72px;
   white-space: nowrap;
   position: relative;
+  touch-action: none; // 拖拽必备，防止移动端滚动干扰
 
   &:not(.active):hover {
     background: #f0f2f5;
     color: #262626;
+  }
+
+  &.dragging {
+    opacity: 0.8;
+    scale: 1.02;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: #fff !important;
+    z-index: 100;
   }
 
   &.active {

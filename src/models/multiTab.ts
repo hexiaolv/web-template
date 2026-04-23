@@ -1,72 +1,208 @@
-/**
- * 多页签全局状态模型
- * 路径: src/models/multiTab.ts
- * 使用 @umijs/max 的 useModel 驱动，自动注册为全局 model
- */
-
-import { history } from '@umijs/max';
-import { message } from 'antd';
-import { useCallback, useState } from 'react';
+import { arrayMove } from '@dnd-kit/sortable';
+import { getIntl, history, useAppData, useModel } from '@umijs/max';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 export interface TabItem {
-  /** 路由路径，作为唯一 key */
+  /** 路由路径，用于跳转 */
   path: string;
   /** 显示标题 */
   title: string;
-  /** 菜单图标（antd icon name 或 ReactNode key） */
+  /** 关联的组件文件路径，用于物理去重 */
+  file?: string;
+  /** 菜单图标 */
   icon?: string;
-  /** 是否固定（不可关闭） */
+  /** 是否固定 */
   fixed?: boolean;
-  /** 刷新 key，变化时强制重新挂载子组件 */
+  /** 刷新 key */
   reloadKey?: number;
 }
 
-const HOME_TAB: TabItem = {
-  path: '/welcome',
-  title: '工作台',
-  icon: 'HomeOutlined',
-  fixed: true,
-};
-
 const MAX_TABS = 15;
 
-export default function useMultiTab() {
-  const [tabs, setTabs] = useState<TabItem[]>([HOME_TAB]);
-  const [activeKey, setActiveKey] = useState<string>(HOME_TAB.path);
+export interface MultiTabModel {
+  tabs: TabItem[];
+  activeKey: string;
+  moveTab: (activeId: string, overId: string) => void;
+  openTab: (tab: Omit<TabItem, 'reloadKey'>) => void;
+  switchTab: (path: string) => void;
+  closeTab: (path: string) => void;
+  reloadTab: (path: string) => void;
+  toggleFixedTab: (path: string) => void;
+  closeOtherTabs: (path: string) => void;
+  closeRightTabs: (path: string) => void;
+  closeAllTabs: () => void;
+  syncRoute: (pathname: string, routeTitle?: string) => void;
+  homePath: string;
+}
 
-  // ─── 打开 / 激活一个 Tab ───────────────────────────────────────────────────
-  const openTab = useCallback(
-    (tab: Omit<TabItem, 'reloadKey'>) => {
-      const exists = tabs.find((t) => t.path === tab.path);
+export default function useMultiTab(): MultiTabModel {
+  const { initialState }: { initialState: any } = useModel('@@initialState');
+  const { routes: allRoutes } = useAppData();
 
-      if (!exists && tabs.length >= MAX_TABS) {
-        message.warning(
-          `最多只能打开 ${MAX_TABS} 个页签，请先关闭部分不用的页签`,
-        );
-        return;
-      }
+  const configHomePath: string = initialState?.settings?.homeTabPath || '/';
 
-      setTabs((prev) => {
-        if (prev.find((t) => t.path === tab.path)) return prev;
-        if (prev.length >= MAX_TABS) return prev;
-        return [...prev, { ...tab, reloadKey: 0 }];
-      });
+  // 1. 建立路由索引 Map，将查找复杂度从 O(n) 降至 O(1) [js-index-maps]
+  const routesMap = useMemo(() => {
+    return new Map(Object.values(allRoutes).map((r: any) => [r.path, r]));
+  }, [allRoutes]);
 
-      setActiveKey(tab.path);
-      if (history.location.pathname !== tab.path) {
-        history.push(tab.path);
-      }
+  /**
+   * 辅助：获取路由最终指向的物理信息
+   */
+  const getRouteInfo = useCallback(
+    (path: string) => {
+      // 递归处理重定向
+      const findFinalPath = (p: string): string => {
+        const r = routesMap.get(p);
+        if (r?.redirect) return findFinalPath(r.redirect);
+        return p;
+      };
+
+      const realPath = findFinalPath(path);
+      const route = routesMap.get(realPath);
+
+      return {
+        path: realPath,
+        file: route?.file || route?.component,
+        name: route?.name,
+      };
     },
-    [tabs],
+    [routesMap],
   );
 
-  // ─── 激活已有 Tab ──────────────────────────────────────────────────────────
+  const [tabs, setTabs] = useState<TabItem[]>([]);
+  const [activeKey, setActiveKey] = useState<string>('');
+
+  // 1. 定义首页真实路径
+  const homePath = getRouteInfo(configHomePath).path;
+
+  /**
+   * 辅助：动态解析标题
+   */
+  const resolveTitle = useCallback((path: string, name?: string) => {
+    const intl = getIntl();
+    const i18nKey = name ? `menu.${name}` : `menu${path.replace(/\//g, '.')}`;
+    if (i18nKey in intl.messages) {
+      return intl.formatMessage({ id: i18nKey });
+    }
+    return name || '首页';
+  }, []);
+
+  // 1. 初始化首页页签
+  useEffect(() => {
+    const info = getRouteInfo(configHomePath);
+
+    setTabs((prev) => {
+      // 如果已经有相同文件或路径的页签，不重复添加
+      if (prev.some((t) => t.file === info.file || t.path === info.path))
+        return prev;
+
+      const homeTab: TabItem = {
+        path: info.path,
+        file: info.file,
+        title: resolveTitle(info.path, info.name),
+        icon: 'HomeOutlined',
+        fixed: true,
+        reloadKey: 0,
+      };
+      return [homeTab, ...prev];
+    });
+
+    // 初始激活逻辑
+    const currentPath = history.location.pathname;
+    const currentInfo = getRouteInfo(currentPath);
+    if (!activeKey || currentInfo.file === info.file) {
+      setActiveKey(currentInfo.path);
+    }
+  }, [configHomePath, getRouteInfo, resolveTitle]);
+
+  // 2. 核心：同步/开启路由
+  const syncRoute = useCallback(
+    (pathname: string, routeTitle?: string) => {
+      const info = getRouteInfo(pathname);
+      if (!info.path || info.path.startsWith('/user')) return;
+
+      setTabs((prev) => {
+        const existingIdx = prev.findIndex(
+          (t) => (t.file && t.file === info.file) || t.path === info.path,
+        );
+
+        if (existingIdx > -1) {
+          if (prev[existingIdx].path !== info.path) {
+            const next = [...prev];
+            next[existingIdx] = { ...next[existingIdx], path: info.path };
+            return next;
+          }
+          return prev;
+        }
+
+        if (prev.length >= MAX_TABS) return prev;
+
+        const title = routeTitle || resolveTitle(info.path, info.name);
+
+        const newTab: TabItem = {
+          path: info.path,
+          file: info.file,
+          title,
+          reloadKey: 0,
+          fixed: false, // 显式初始化 fixed 属性
+        };
+        // 保证添加新页签后，固定页签依然在前面
+        const next = [...prev, newTab];
+        return next.sort((a, b) => {
+          const aFixed = !!a.fixed;
+          const bFixed = !!b.fixed;
+          return aFixed === bFixed ? 0 : aFixed ? -1 : 1;
+        });
+      });
+
+      setActiveKey(info.path);
+    },
+    [getRouteInfo],
+  );
+
+  // 3. 基础操作
+  const openTab = useCallback(
+    (tab: Omit<TabItem, 'reloadKey'>) => {
+      syncRoute(tab.path, tab.title);
+      history.push(tab.path);
+    },
+    [syncRoute],
+  );
+
   const switchTab = useCallback((path: string) => {
     setActiveKey(path);
     history.push(path);
   }, []);
 
-  // ─── 关闭一个 Tab ──────────────────────────────────────────────────────────
+  const moveTab = useCallback((activeId: string, overId: string) => {
+    setTabs((prev) => {
+      const oldIndex = prev.findIndex((t) => t.path === activeId);
+      const newIndex = prev.findIndex((t) => t.path === overId);
+      const next = arrayMove(prev, oldIndex, newIndex);
+      // 保持固定页签在前的稳定排序
+      return [...next].sort((a, b) => {
+        if (a.fixed && !b.fixed) return -1;
+        if (!a.fixed && b.fixed) return 1;
+        return 0;
+      });
+    });
+  }, []);
+
+  const toggleFixedTab = useCallback((path: string) => {
+    setTabs((prev) => {
+      const next = prev.map((t) =>
+        t.path === path ? { ...t, fixed: !t.fixed } : t,
+      );
+      // 切换后重新排序
+      return next.sort((a, b) => {
+        const aFixed = !!a.fixed;
+        const bFixed = !!b.fixed;
+        return aFixed === bFixed ? 0 : aFixed ? -1 : 1;
+      });
+    });
+  }, []);
+
   const closeTab = useCallback(
     (path: string) => {
       setTabs((prev) => {
@@ -83,7 +219,6 @@ export default function useMultiTab() {
     [activeKey],
   );
 
-  // ─── 刷新当前 Tab ──────────────────────────────────────────────────────────
   const reloadTab = useCallback((path: string) => {
     setTabs((prev) =>
       prev.map((t) =>
@@ -92,86 +227,51 @@ export default function useMultiTab() {
     );
   }, []);
 
-  // ─── 关闭其他 Tab ─────────────────────────────────────────────────────────
   const closeOtherTabs = useCallback((path: string) => {
     setTabs((prev) => prev.filter((t) => t.fixed || t.path === path));
     setActiveKey(path);
     history.push(path);
   }, []);
 
-  // ─── 关闭右侧 Tab ─────────────────────────────────────────────────────────
   const closeRightTabs = useCallback(
     (path: string) => {
       setTabs((prev) => {
         const idx = prev.findIndex((t) => t.path === path);
-        return prev.filter((t, i) => i <= idx || t.fixed);
-      });
-      // 若当前激活在右侧，则跳回目标
-      setTabs((prev) => {
-        const paths = prev.map((t) => t.path);
-        if (!paths.includes(activeKey)) {
+        const filtered = prev.filter((t, i) => i <= idx || t.fixed);
+        if (!filtered.map((t) => t.path).includes(activeKey)) {
           setActiveKey(path);
           history.push(path);
         }
-        return prev;
+        return filtered;
       });
     },
     [activeKey],
   );
 
-  // ─── 关闭全部（保留固定） ──────────────────────────────────────────────────
   const closeAllTabs = useCallback(() => {
     setTabs((prev) => {
       const fixed = prev.filter((t) => t.fixed);
-      const firstFixed = fixed[0];
-      if (firstFixed) {
-        setActiveKey(firstFixed.path);
-        history.push(firstFixed.path);
+      if (fixed[0]) {
+        setActiveKey(fixed[0].path);
+        history.push(fixed[0].path);
       }
       return fixed;
     });
   }, []);
 
-  // ─── 路由同步：外部路由变化时自动激活对应 Tab ─────────────────────────────
-  const syncRoute = useCallback(
-    (pathname: string, routeTitle?: string) => {
-      const exists = tabs.find((t) => t.path === pathname);
-
-      if (!exists && routeTitle) {
-        if (tabs.length >= MAX_TABS) {
-          message.warning(
-            `最多只能打开 ${MAX_TABS} 个页签，请先关闭部分不用的页签`,
-          );
-          // 撤回路由到上一个激活的页签
-          if (activeKey && activeKey !== pathname) {
-            history.push(activeKey);
-          }
-          return;
-        }
-      }
-
-      setTabs((prev) => {
-        if (prev.find((t) => t.path === pathname)) return prev;
-        if (!routeTitle) return prev;
-        if (prev.length >= MAX_TABS) return prev;
-        return [...prev, { path: pathname, title: routeTitle, reloadKey: 0 }];
-      });
-
-      setActiveKey(pathname);
-    },
-    [tabs, activeKey],
-  );
-
   return {
     tabs,
     activeKey,
+    moveTab,
     openTab,
     switchTab,
     closeTab,
     reloadTab,
+    toggleFixedTab,
     closeOtherTabs,
     closeRightTabs,
     closeAllTabs,
     syncRoute,
+    homePath,
   };
 }
