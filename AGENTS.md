@@ -50,6 +50,7 @@ author: 负责人
 - API 调用：**仅 Umi request**，禁止 fetch/axios
 - 类型：**禁止 any**，导入用 `import type`
 - 样式：**禁止硬编码颜色**，用主题 token 或 Tailwind 工具类
+- Git 提交：**仅英文** (Commit messages must be in English)
 - `src/.umi/` **禁止手动修改**
 
 ## 常用命令
