@@ -23,7 +23,7 @@ const loginPath = '/user/login';
  * @see https://umijs.org/docs/api/runtime-config#getinitialstate
  * */
 export async function getInitialState(): Promise<{
-  settings?: Partial<LayoutSettings>;
+  settings?: Partial<LayoutSettings> & { tabsLayout?: boolean };
   currentUser?: API.CurrentUser;
   loading?: boolean;
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
@@ -80,11 +80,20 @@ export const layout: RunTimeLayoutConfig = ({
   setInitialState,
 }) => {
   return {
-    // ... 前面的配置保持不变
     actionsRender: () => [
       <Question key="doc" />,
       <SelectLang key="SelectLang" />,
     ],
+    avatarProps: {
+      src: initialState?.currentUser?.avatar,
+      title: <AvatarName />,
+      render: (_, avatarChildren) => {
+        return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
+      },
+    },
+    waterMarkProps: {
+      content: initialState?.currentUser?.name,
+    },
     menuItemRender: (item, dom) => {
       const { path } = item;
       // 如果没有路径，直接返回 dom
@@ -114,13 +123,6 @@ export const layout: RunTimeLayoutConfig = ({
       };
 
       return <MenuItemWithTab />;
-    },
-    avatarProps: {
-      src: initialState?.currentUser?.avatar,
-      title: <AvatarName />,
-      render: (_, avatarChildren) => (
-        <AvatarDropdown>{avatarChildren}</AvatarDropdown>
-      ),
     },
     footerRender: () => <Footer />,
     onPageChange: () => {
