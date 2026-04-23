@@ -7,6 +7,7 @@
 | 文档 | 功能 | 状态 |
 |------|------|------|
 | [new-user-onboarding.md](./new-user-onboarding.md) | 新用户引导 | 草稿 |
+| [2026-04-23-multitab.spec.md](./2026-04-23-multitab.spec.md) | 多页签导航系统 | 已完成 |
 
 ## 写作规范
 

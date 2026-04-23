@@ -6,7 +6,7 @@ import React from 'react';
 
 const getRepoUrl = () => {
   if (!packageJson.repository)
-    return 'https://github.com/ant-design/ant-design-pro';
+    return 'https://github.com/hexiaolv/web-template';
   const parsed = GitUrlParse(packageJson.repository);
   return `https://${parsed.source}/${parsed.owner}/${parsed.name}`;
 };
@@ -46,7 +46,7 @@ const Footer: React.FC = () => {
           title: (
             <>
               <GithubOutlined style={{ marginRight: 8 }} />
-              Ant Design Pro
+              Web Template
             </>
           ),
           href: REPO,

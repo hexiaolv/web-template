@@ -18,7 +18,33 @@ Ant Design Pro 企业级脚手架模板。React 19 + Umi Max 4 + Ant Design 6。
 | [docs/design-docs/core-beliefs.md](./docs/design-docs/core-beliefs.md) | 工程核心决策与背后原因 |
 | [docs/product-specs/index.md](./docs/product-specs/index.md) | 产品功能规格索引 |
 
-## 关键规则（违反需说明原因）
+## 功能模块文档规范
+
+### 1. 文件命名约定
+统一使用小写并以中划线分隔，格式为：`[YYYY-MM-DD]-[功能名].[类型].md`
+- **类型标识**：`spec` (规格), `design` (设计), `impl` (实施), `trouble` (避坑)
+- **示例**：`2024-04-23-multitab.spec.md`
+
+### 2. 必要元数据 (文档头部)
+每篇文档开头必须包含以下区块：
+```markdown
+---
+name: 功能名称
+date: YYYY-MM-DD
+status: [草稿 | 进行中 | 已完成 | 已废弃]
+author: 负责人
+---
+```
+
+### 3. 目录映射
+每一个独立的功能模块必须提供以下文档：
+
+- **产品规格 (`docs/product-specs/`)**：定义“是什么”，包含用户故事、验收标准、边界情况。新增后需更新该目录下的 `index.md`。
+- **技术设计 (`docs/design-docs/`)**：定义“怎么做”，遵循四段式结构（背景、方案对比、决策、后果）。不写教程，聚焦决策原因。新增后需更新 `index.md`。
+- **实施路径 (`docs/implementations/`)**：记录“做了什么”，包含集成步骤、核心代码说明。
+- **执行计划 (`docs/exec-plans/`)**：记录任务拆解。`active/` 存放进行中，`completed/` 存放已完成。
+- **避坑指南 (`docs/troubleshooting/`)**：记录“错了什么”，包含开发中遇到的坑、解决方案、遗留问题。
+- **自动生成 (`docs/generated/`)**：只允许存放自动生成的 schema 记录或纯输出结果（如 `db-schema.md`）。
 
 - 包管理器：**仅 pnpm**，禁止 npm/yarn
 - API 调用：**仅 Umi request**，禁止 fetch/axios
