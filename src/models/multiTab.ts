@@ -36,45 +36,39 @@ export interface MultiTabModel {
 }
 
 export default function useMultiTab(): MultiTabModel {
-  const { initialState }: { initialState: any } = useModel('@@initialState');
+  const { initialState } = useModel('@@initialState');
   const { routes: allRoutes } = useAppData();
 
-  const configHomePath: string = initialState?.settings?.homeTabPath || '/';
-
-  // 1. 建立路由索引 Map，将查找复杂度从 O(n) 降至 O(1) [js-index-maps]
-  const routesMap = useMemo(() => {
-    return new Map(Object.values(allRoutes).map((r: any) => [r.path, r]));
-  }, [allRoutes]);
+  const configHomePath = initialState?.settings?.homeTabPath || '/';
 
   /**
-   * 辅助：获取路由最终指向的物理信息
+   * 核心：获取路由最终指向的物理信息（处理重定向）
    */
-  const getRouteInfo = useCallback(
+  const getCanonicalInfo = useCallback(
     (path: string) => {
-      // 递归处理重定向
-      const findFinalPath = (p: string): string => {
-        const r = routesMap.get(p);
-        if (r?.redirect) return findFinalPath(r.redirect);
-        return p;
+      const routes = Object.values(allRoutes);
+
+      const findRoute = (p: string, visited = new Set<string>()): any => {
+        if (visited.has(p)) return null;
+        visited.add(p);
+
+        // 优先匹配绝对路径
+        const route = routes.find((r: any) => r.path === p);
+        if (route?.redirect) return findRoute(route.redirect, visited);
+        return route;
       };
 
-      const realPath = findFinalPath(path);
-      const route = routesMap.get(realPath);
-
+      const route = findRoute(path);
       return {
-        path: realPath,
+        path: route?.path || path,
         file: route?.file || route?.component,
         name: route?.name,
+        // 如果路由配置了 layout: false，则不显示多页签
+        hideInTabs: route?.layout === false || route?.hideInTabs === true,
       };
     },
-    [routesMap],
+    [allRoutes],
   );
-
-  const [tabs, setTabs] = useState<TabItem[]>([]);
-  const [activeKey, setActiveKey] = useState<string>('');
-
-  // 1. 定义首页真实路径
-  const homePath = getRouteInfo(configHomePath).path;
 
   /**
    * 辅助：动态解析标题
@@ -88,19 +82,34 @@ export default function useMultiTab(): MultiTabModel {
     return name || '首页';
   }, []);
 
-  // 1. 初始化首页页签
-  useEffect(() => {
-    const info = getRouteInfo(configHomePath);
+  // 1. 预计算首页信息
+  const homeInfo = useMemo(
+    () => getCanonicalInfo(configHomePath),
+    [getCanonicalInfo, configHomePath],
+  );
 
+  const [tabs, setTabs] = useState<TabItem[]>([]);
+  const [activeKey, setActiveKey] = useState<string>('');
+
+  // 2. 初始化首页页签
+  useEffect(() => {
     setTabs((prev) => {
-      // 如果已经有相同文件或路径的页签，不重复添加
-      if (prev.some((t) => t.file === info.file || t.path === info.path))
+      if (
+        prev.some(
+          (t) =>
+            (t.file && t.file === homeInfo.file) || t.path === homeInfo.path,
+        )
+      ) {
         return prev;
+      }
 
       const homeTab: TabItem = {
-        path: info.path,
-        file: info.file,
-        title: resolveTitle(info.path, info.name),
+        path: homeInfo.path,
+        file: homeInfo.file,
+        title: getIntl().formatMessage({
+          id: 'menu.home',
+          defaultMessage: '首页',
+        }),
         icon: 'HomeOutlined',
         fixed: true,
         reloadKey: 0,
@@ -108,29 +117,33 @@ export default function useMultiTab(): MultiTabModel {
       return [homeTab, ...prev];
     });
 
-    // 初始激活逻辑
+    // 初始激活
     const currentPath = history.location.pathname;
-    const currentInfo = getRouteInfo(currentPath);
-    if (!activeKey || currentInfo.file === info.file) {
+    const currentInfo = getCanonicalInfo(currentPath);
+    if (!activeKey || currentInfo.file === homeInfo.file) {
       setActiveKey(currentInfo.path);
     }
-  }, [configHomePath, getRouteInfo, resolveTitle]);
+  }, [homeInfo, getCanonicalInfo, activeKey]);
 
-  // 2. 核心：同步/开启路由
+  // 3. 核心：同步路由
   const syncRoute = useCallback(
     (pathname: string, routeTitle?: string) => {
-      const info = getRouteInfo(pathname);
-      if (!info.path || info.path.startsWith('/user')) return;
+      const info = getCanonicalInfo(pathname);
+      if (!info.path || info.hideInTabs) return;
+
+      // 如果当前路由指向物理文件与首页一致，则视为首页
+      const isHome = info.file && info.file === homeInfo.file;
+      const targetPath = isHome ? homeInfo.path : info.path;
 
       setTabs((prev) => {
         const existingIdx = prev.findIndex(
-          (t) => (t.file && t.file === info.file) || t.path === info.path,
+          (t) => (t.file && t.file === info.file) || t.path === targetPath,
         );
 
         if (existingIdx > -1) {
-          if (prev[existingIdx].path !== info.path) {
+          if (prev[existingIdx].path !== targetPath) {
             const next = [...prev];
-            next[existingIdx] = { ...next[existingIdx], path: info.path };
+            next[existingIdx] = { ...next[existingIdx], path: targetPath };
             return next;
           }
           return prev;
@@ -139,29 +152,25 @@ export default function useMultiTab(): MultiTabModel {
         if (prev.length >= MAX_TABS) return prev;
 
         const title = routeTitle || resolveTitle(info.path, info.name);
-
         const newTab: TabItem = {
-          path: info.path,
+          path: targetPath,
           file: info.file,
           title,
           reloadKey: 0,
-          fixed: false, // 显式初始化 fixed 属性
+          fixed: false,
         };
-        // 保证添加新页签后，固定页签依然在前面
+
         const next = [...prev, newTab];
-        return next.sort((a, b) => {
-          const aFixed = !!a.fixed;
-          const bFixed = !!b.fixed;
-          return aFixed === bFixed ? 0 : aFixed ? -1 : 1;
-        });
+        return next.sort((a, b) =>
+          !!a.fixed === !!b.fixed ? 0 : a.fixed ? -1 : 1,
+        );
       });
 
-      setActiveKey(info.path);
+      setActiveKey(targetPath);
     },
-    [getRouteInfo],
+    [homeInfo, getCanonicalInfo, resolveTitle],
   );
 
-  // 3. 基础操作
   const openTab = useCallback(
     (tab: Omit<TabItem, 'reloadKey'>) => {
       syncRoute(tab.path, tab.title);
@@ -180,7 +189,6 @@ export default function useMultiTab(): MultiTabModel {
       const oldIndex = prev.findIndex((t) => t.path === activeId);
       const newIndex = prev.findIndex((t) => t.path === overId);
       const next = arrayMove(prev, oldIndex, newIndex);
-      // 保持固定页签在前的稳定排序
       return [...next].sort((a, b) => {
         if (a.fixed && !b.fixed) return -1;
         if (!a.fixed && b.fixed) return 1;
@@ -194,12 +202,9 @@ export default function useMultiTab(): MultiTabModel {
       const next = prev.map((t) =>
         t.path === path ? { ...t, fixed: !t.fixed } : t,
       );
-      // 切换后重新排序
-      return next.sort((a, b) => {
-        const aFixed = !!a.fixed;
-        const bFixed = !!b.fixed;
-        return aFixed === bFixed ? 0 : aFixed ? -1 : 1;
-      });
+      return next.sort((a, b) =>
+        !!a.fixed === !!b.fixed ? 0 : a.fixed ? -1 : 1,
+      );
     });
   }, []);
 
@@ -272,6 +277,6 @@ export default function useMultiTab(): MultiTabModel {
     closeRightTabs,
     closeAllTabs,
     syncRoute,
-    homePath,
+    homePath: homeInfo.path,
   };
 }

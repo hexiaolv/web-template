@@ -17,10 +17,7 @@ const RouteListener: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const { pathname } = location;
-    // 跳过登录等不需要 tab 的页面
-    if (pathname.startsWith('/user')) return;
-
-    // 仅传递路径，由 Model 层通过索引 Map 高效解析物理文件及标题
+    // 仅传递路径，由 Model 层解析元数据决定是否显示及如何显示
     syncRoute(pathname);
   }, [location.pathname, syncRoute]);
 
