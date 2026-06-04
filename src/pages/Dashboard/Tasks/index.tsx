@@ -221,73 +221,71 @@ const TasksCenter: React.FC = () => {
               <Empty description="当前科室及业务域下暂无需要您处理的待办事项" />
             </div>
           ) : (
-            <>
-              {tasks.map((item: any) => (
-                <div key={item.id} className={styles.listItem}>
-                  <Row gutter={16} align="middle">
-                    <Col span={18}>
-                      <Space size="middle" style={{ marginBottom: 4 }}>
-                        <Tag color={item.type === '审批' ? 'blue' : 'orange'}>
-                          {item.type}任务
-                        </Tag>
-                        <span className={styles.taskTitle}>{item.title}</span>
-                      </Space>
-                      <div className={styles.taskDesc}>{item.desc}</div>
-                      <div
-                        style={{
-                          display: 'flex',
-                          gap: '16px',
-                          fontSize: '12px',
-                          color: '#8c8c8c',
-                        }}
-                      >
-                        <span>提交人: {item.creator}</span>
-                        <span>时间: {item.time}</span>
-                      </div>
-                    </Col>
-                    <Col span={6} style={{ textAlign: 'right' }}>
-                      {item.type === '审批' ? (
-                        <Space>
-                          <Button
-                            danger
-                            size="small"
-                            icon={<CloseCircleOutlined />}
-                            onClick={() => handleTaskAction(item, 'reject')}
-                          >
-                            驳回
-                          </Button>
-                          <Button
-                            type="primary"
-                            size="small"
-                            icon={<CheckCircleOutlined />}
-                            style={{
-                              backgroundColor: '#25B7AA',
-                              borderColor: '#25B7AA',
-                            }}
-                            onClick={() => handleTaskAction(item, 'approve')}
-                          >
-                            同意
-                          </Button>
-                        </Space>
-                      ) : (
+            tasks.map((item: any) => (
+              <div key={item.id} className={styles.listItem}>
+                <Row gutter={16} align="middle">
+                  <Col span={18}>
+                    <Space size="middle" style={{ marginBottom: 4 }}>
+                      <Tag color={item.type === '审批' ? 'blue' : 'orange'}>
+                        {item.type}任务
+                      </Tag>
+                      <span className={styles.taskTitle}>{item.title}</span>
+                    </Space>
+                    <div className={styles.taskDesc}>{item.desc}</div>
+                    <div
+                      style={{
+                        display: 'flex',
+                        gap: '16px',
+                        fontSize: '12px',
+                        color: '#8c8c8c',
+                      }}
+                    >
+                      <span>提交人: {item.creator}</span>
+                      <span>时间: {item.time}</span>
+                    </div>
+                  </Col>
+                  <Col span={6} style={{ textAlign: 'right' }}>
+                    {item.type === '审批' ? (
+                      <Space>
+                        <Button
+                          danger
+                          size="small"
+                          icon={<CloseCircleOutlined />}
+                          onClick={() => handleTaskAction(item, 'reject')}
+                        >
+                          驳回
+                        </Button>
                         <Button
                           type="primary"
                           size="small"
-                          icon={<InboxOutlined />}
+                          icon={<CheckCircleOutlined />}
                           style={{
                             backgroundColor: '#25B7AA',
                             borderColor: '#25B7AA',
                           }}
-                          onClick={() => handleTaskAction(item, 'confirm')}
+                          onClick={() => handleTaskAction(item, 'approve')}
                         >
-                          确认签收
+                          同意
                         </Button>
-                      )}
-                    </Col>
-                  </Row>
-                </div>
-              ))}
-            </>
+                      </Space>
+                    ) : (
+                      <Button
+                        type="primary"
+                        size="small"
+                        icon={<InboxOutlined />}
+                        style={{
+                          backgroundColor: '#25B7AA',
+                          borderColor: '#25B7AA',
+                        }}
+                        onClick={() => handleTaskAction(item, 'confirm')}
+                      >
+                        确认签收
+                      </Button>
+                    )}
+                  </Col>
+                </Row>
+              </div>
+            ))
           )}
         </Spin>
       </Card>

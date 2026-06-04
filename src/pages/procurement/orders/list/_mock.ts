@@ -171,7 +171,7 @@ export default defineMock({
         (o) =>
           o.id.includes(keyword) ||
           o.supplier.includes(keyword) ||
-          (o.contractNo && o.contractNo.includes(keyword)),
+          o.contractNo?.includes(keyword),
       );
     }
 

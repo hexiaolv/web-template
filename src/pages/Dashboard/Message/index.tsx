@@ -220,31 +220,29 @@ const MessageCenter: React.FC = () => {
               <Empty description="暂无符合当前权限隔离口径的公告或通知" />
             </div>
           ) : (
-            <>
-              {currentList.map((item: any) => (
-                <div key={item.id} className={styles.listItem}>
-                  <Row gutter={16} align="middle">
-                    <Col span={2}>{renderMessageIcon(item.category)}</Col>
-                    <Col span={22}>
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <span className={styles.metaTitle}>{item.title}</span>
-                        <span className={styles.metaTime}>
-                          <CalendarOutlined style={{ marginRight: 4 }} />
-                          {item.time}
-                        </span>
-                      </div>
-                      <div className={styles.metaContent}>{item.content}</div>
-                    </Col>
-                  </Row>
-                </div>
-              ))}
-            </>
+            currentList.map((item: any) => (
+              <div key={item.id} className={styles.listItem}>
+                <Row gutter={16} align="middle">
+                  <Col span={2}>{renderMessageIcon(item.category)}</Col>
+                  <Col span={22}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <span className={styles.metaTitle}>{item.title}</span>
+                      <span className={styles.metaTime}>
+                        <CalendarOutlined style={{ marginRight: 4 }} />
+                        {item.time}
+                      </span>
+                    </div>
+                    <div className={styles.metaContent}>{item.content}</div>
+                  </Col>
+                </Row>
+              </div>
+            ))
           )}
         </Spin>
       </Card>

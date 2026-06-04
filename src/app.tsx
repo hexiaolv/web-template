@@ -6,7 +6,6 @@ import {
   FullscreenExitOutlined,
   FullscreenOutlined,
   HomeOutlined,
-  LinkOutlined,
   MedicineBoxOutlined,
   PartitionOutlined,
   WarningOutlined,
@@ -1180,7 +1179,7 @@ export const layout: RunTimeLayoutConfig = ({
     onCollapse: (collapsed: boolean) => {
       setInitialState((s) => ({ ...s, collapsed }));
     },
-    menuFooterRender: (props) => {
+    menuFooterRender: (_props) => {
       if (initialState?.collapsed) {
         return (
           <div

@@ -46,7 +46,7 @@ const SettingsPage: React.FC = () => {
       if (values.name) {
         localStorage.setItem('customUserName', values.name);
         setInitialState((s) => {
-          if (s && s.currentUser) {
+          if (s?.currentUser) {
             return {
               ...s,
               currentUser: {

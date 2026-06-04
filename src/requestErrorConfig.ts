@@ -41,6 +41,8 @@ export const errorConfig: RequestConfig = {
     // 错误接收及处理
     errorHandler: (error: any, opts: any) => {
       if (opts?.skipErrorHandler) throw error;
+      // 401 未登录，静默处理（登录页正常现象）
+      if (error?.response?.status === 401) return;
       // 我们的 errorThrower 抛出的错误。
       if (error.name === 'BizError') {
         const errorInfo: ResponseStructure | undefined = error.info;
@@ -88,9 +90,8 @@ export const errorConfig: RequestConfig = {
   // 请求拦截器
   requestInterceptors: [
     (config: RequestOptions) => {
-      // 拦截请求配置，进行个性化处理。
-      const url = config?.url?.concat('?token=123');
-      return { ...config, url };
+      // 拦截请求配置，进行个性化处理
+      return config;
     },
   ],
 

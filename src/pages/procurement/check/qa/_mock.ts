@@ -95,7 +95,7 @@ export default defineMock({
       filtered = filtered.filter(
         (q) =>
           q.id.includes(keyword) ||
-          (q.receiveId && q.receiveId.includes(keyword)) ||
+          q.receiveId?.includes(keyword) ||
           q.inspector.includes(keyword),
       );
     }

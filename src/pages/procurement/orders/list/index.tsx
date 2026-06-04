@@ -13,7 +13,6 @@ import type { ProColumns } from '@ant-design/pro-components';
 import {
   DrawerForm,
   PageContainer,
-  ProDescriptions,
   ProFormDatePicker,
   ProFormSelect,
   ProFormText,
@@ -389,7 +388,7 @@ const ProcurementOrderList: React.FC = () => {
         }
         open={detailVisible}
         onClose={() => setDetailVisible(false)}
-        width={960}
+        styles={{ wrapper: { width: 960 } }}
         extra={
           currentOrder &&
           (currentOrder.status === 'delivering' ||
@@ -492,9 +491,11 @@ const ProcurementOrderList: React.FC = () => {
                 value={currentOrder.receivedAmount}
                 prefix="¥"
                 precision={0}
-                valueStyle={{
-                  color:
-                    currentOrder.receivedAmount > 0 ? '#52c41a' : undefined,
+                styles={{
+                  content: {
+                    color:
+                      currentOrder.receivedAmount > 0 ? '#52c41a' : undefined,
+                  },
                 }}
               />
               <Statistic
@@ -502,8 +503,11 @@ const ProcurementOrderList: React.FC = () => {
                 value={currentOrder.pendingAmount}
                 prefix="¥"
                 precision={0}
-                valueStyle={{
-                  color: currentOrder.pendingAmount > 0 ? '#fa8c16' : undefined,
+                styles={{
+                  content: {
+                    color:
+                      currentOrder.pendingAmount > 0 ? '#fa8c16' : undefined,
+                  },
                 }}
               />
             </Space>

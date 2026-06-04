@@ -217,7 +217,7 @@ const QaList: React.FC = () => {
         }
         open={detailVisible}
         onClose={() => setDetailVisible(false)}
-        width={640}
+        styles={{ wrapper: { width: 640 } }}
       >
         {currentQa && (
           <Descriptions bordered column={2} size="small">

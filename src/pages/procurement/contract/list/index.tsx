@@ -214,7 +214,7 @@ const ContractList: React.FC = () => {
         }
         open={detailVisible}
         onClose={() => setDetailVisible(false)}
-        width={700}
+        styles={{ wrapper: { width: 700 } }}
       >
         {currentContract && (
           <>

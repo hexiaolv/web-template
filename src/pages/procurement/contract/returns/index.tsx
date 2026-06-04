@@ -266,7 +266,7 @@ const ReturnList: React.FC = () => {
         }
         open={detailVisible}
         onClose={() => setDetailVisible(false)}
-        width={600}
+        styles={{ wrapper: { width: 600 } }}
       >
         {currentReturn && (
           <Descriptions bordered column={2} size="small">

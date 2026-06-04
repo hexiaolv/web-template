@@ -298,7 +298,7 @@ const ReceivingList: React.FC = () => {
         }
         open={detailVisible}
         onClose={() => setDetailVisible(false)}
-        width={1000}
+        styles={{ wrapper: { width: 1000 } }}
         extra={
           currentReceiving?.status === 'in_progress' && (
             <Button

@@ -313,7 +313,7 @@ const TableList: React.FC = () => {
       )}
 
       <Drawer
-        size={600}
+        styles={{ wrapper: { width: 600 } }}
         open={showDetail}
         onClose={() => {
           setCurrentRow(undefined);

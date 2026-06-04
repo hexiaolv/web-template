@@ -368,7 +368,7 @@ const ProcurementPlan: React.FC = () => {
         }
         open={detailVisible}
         onClose={() => setDetailVisible(false)}
-        width={900}
+        styles={{ wrapper: { width: 900 } }}
         extra={
           currentPlan?.status === 'pending' && (
             <Space>
@@ -445,7 +445,7 @@ const ProcurementPlan: React.FC = () => {
                 value={currentPlan.totalAmount}
                 prefix="¥"
                 precision={0}
-                valueStyle={{ color: '#1677ff' }}
+                styles={{ content: { color: '#1677ff' } }}
               />
             </Space>
 
