@@ -16,7 +16,6 @@ import {
   Card,
   Col,
   Divider,
-  List,
   Progress,
   Row,
   Spin,
@@ -337,30 +336,40 @@ const Desk: React.FC = () => {
               }
               style={{ minHeight: '300px', marginBottom: '20px' }}
             >
-              <List
-                dataSource={getDeskTasks()}
-                renderItem={(item) => (
-                  <List.Item
-                    actions={[
-                      <Button
-                        key="go-action"
-                        type="primary"
-                        ghost
-                        size="small"
-                        style={{ borderColor: '#25B7AA', color: '#25B7AA' }}
-                        onClick={() => history.push('/dashboard/tasks')}
-                      >
-                        去{item.type}
-                      </Button>,
-                    ]}
+              {getDeskTasks().map((item) => (
+                <div
+                  key={item.title}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '12px 0',
+                    borderBottom: '1px solid #f0f0f0',
+                  }}
+                >
+                  <div>
+                    <div style={{ fontWeight: 500 }}>{item.title}</div>
+                    <div
+                      style={{
+                        color: '#8c8c8c',
+                        fontSize: '12px',
+                        marginTop: 4,
+                      }}
+                    >
+                      发起时间: {item.time}
+                    </div>
+                  </div>
+                  <Button
+                    type="primary"
+                    ghost
+                    size="small"
+                    style={{ borderColor: '#25B7AA', color: '#25B7AA' }}
+                    onClick={() => history.push('/dashboard/tasks')}
                   >
-                    <List.Item.Meta
-                      title={item.title}
-                      description={`发起时间: ${item.time}`}
-                    />
-                  </List.Item>
-                )}
-              />
+                    去{item.type}
+                  </Button>
+                </div>
+              ))}
             </Card>
           </Col>
 

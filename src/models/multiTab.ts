@@ -1,12 +1,16 @@
 import { arrayMove } from '@dnd-kit/sortable';
-import { getIntl, history, useAppData, useModel } from '@umijs/max';
+import { history, useAppData, useModel } from '@umijs/max';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 export interface TabItem {
   /** 路由路径，用于跳转 */
   path: string;
-  /** 显示标题 */
+  /** 显示标题（fallback，无对应 i18n key 时使用）*/
   title: string;
+  /** i18n 主 key（路径拼接，如 menu.procurement.orders.plan）*/
+  titleKey?: string;
+  /** i18n 备用 key（单层 name，如 menu.plan）*/
+  titleKeyFallback?: string;
   /** 关联的组件文件路径，用于物理去重 */
   file?: string;
   /** 菜单图标 */
@@ -71,15 +75,19 @@ export default function useMultiTab(): MultiTabModel {
   );
 
   /**
-   * 辅助：动态解析标题
+   * 辅助：计算 i18n key，不做实际翻译（避免 getIntl 时序问题）
    */
   const resolveTitle = useCallback((path: string, name?: string) => {
-    const intl = getIntl();
-    const i18nKey = name ? `menu.${name}` : `menu${path.replace(/\//g, '.')}`;
-    if (i18nKey in intl.messages) {
-      return intl.formatMessage({ id: i18nKey });
-    }
-    return name || '首页';
+    // 优先用路径拼完整 key：menu.procurement.orders.plan
+    const pathKey = `menu${path.replace(/\//g, '.')}`;
+    // 陆级：单层 name key
+    const nameKey = name ? `menu.${name}` : undefined;
+    return {
+      // title 仅作 fallback，真正显示标题由 TabBar 的 useIntl 处理
+      title: name || path.split('/').pop() || '首页',
+      titleKey: pathKey,
+      titleKeyFallback: nameKey,
+    };
   }, []);
 
   // 1. 预计算首页信息
@@ -107,6 +115,7 @@ export default function useMultiTab(): MultiTabModel {
         path: homeInfo.path,
         file: homeInfo.file,
         title: '首页',
+        titleKey: 'menu.home',
         icon: 'HomeOutlined',
         fixed: true,
         reloadKey: 0,
@@ -148,11 +157,17 @@ export default function useMultiTab(): MultiTabModel {
 
         if (prev.length >= MAX_TABS) return prev;
 
-        const title = routeTitle || resolveTitle(info.path, info.name);
+        const { title, titleKey, titleKeyFallback } = resolveTitle(
+          info.path,
+          info.name,
+        );
+        const resolvedTitle = routeTitle || title;
         const newTab: TabItem = {
           path: targetPath,
           file: info.file,
-          title,
+          title: resolvedTitle,
+          titleKey,
+          titleKeyFallback,
           reloadKey: 0,
           fixed: false,
         };
@@ -170,7 +185,8 @@ export default function useMultiTab(): MultiTabModel {
 
   const openTab = useCallback(
     (tab: Omit<TabItem, 'reloadKey'>) => {
-      syncRoute(tab.path, tab.title);
+      // 不传 routeTitle，让 syncRoute 通过 resolveTitle 统一解析 i18n key
+      syncRoute(tab.path);
       history.push(tab.path);
     },
     [syncRoute],

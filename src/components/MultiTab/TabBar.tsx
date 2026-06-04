@@ -26,7 +26,7 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useModel } from '@umijs/max';
+import { useIntl, useModel } from '@umijs/max';
 import type { MenuProps } from 'antd';
 import { Dropdown, Tooltip } from 'antd';
 import React, {
@@ -64,6 +64,24 @@ const SortableTab = memo<{
   onContextMenu: (e: React.MouseEvent, path: string) => void;
   isHome?: boolean;
 }>(({ tab, isActive, onSwitch, onClose, onContextMenu, isHome }) => {
+  const intl = useIntl();
+  // 优先用 titleKey 翻译，不存在则尝试 titleKeyFallback，最终用 title 兜底
+  const displayTitle = useMemo(() => {
+    if (
+      tab.titleKey &&
+      (intl.messages as Record<string, string>)[tab.titleKey]
+    ) {
+      return intl.formatMessage({ id: tab.titleKey });
+    }
+    if (
+      tab.titleKeyFallback &&
+      (intl.messages as Record<string, string>)[tab.titleKeyFallback]
+    ) {
+      return intl.formatMessage({ id: tab.titleKeyFallback });
+    }
+    return tab.title;
+  }, [tab.titleKey, tab.titleKeyFallback, tab.title, intl]);
+
   const {
     attributes,
     listeners,
@@ -104,7 +122,7 @@ const SortableTab = memo<{
             style={{ fontSize: 10, marginRight: 4, color: '#1890ff' }}
           />
         )}
-        {tab.title}
+        {displayTitle}
       </span>
       {!tab.fixed && (
         <span
@@ -122,6 +140,21 @@ const SortableTab = memo<{
 });
 
 const TabBar: React.FC<TabBarProps> = ({ children }) => {
+  const intl = useIntl();
+  // 优先 titleKey → titleKeyFallback → title
+  const getTabTitle = (t: TabItem) => {
+    if (t.titleKey && (intl.messages as Record<string, string>)[t.titleKey]) {
+      return intl.formatMessage({ id: t.titleKey });
+    }
+    if (
+      t.titleKeyFallback &&
+      (intl.messages as Record<string, string>)[t.titleKeyFallback]
+    ) {
+      return intl.formatMessage({ id: t.titleKeyFallback });
+    }
+    return t.title;
+  };
+
   const {
     tabs,
     activeKey,
@@ -223,7 +256,7 @@ const TabBar: React.FC<TabBarProps> = ({ children }) => {
         label: '已打开的页签',
         children: tabs.map((t: TabItem) => ({
           key: t.path,
-          label: t.title,
+          label: getTabTitle(t),
           icon:
             t.path === activeKey ? (
               <span style={{ color: '#1677ff', fontSize: 6 }}>●</span>

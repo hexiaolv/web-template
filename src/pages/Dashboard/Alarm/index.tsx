@@ -209,7 +209,7 @@ const AlarmCenter: React.FC = () => {
 
       <Card
         className={styles.alarmCard}
-        bodyStyle={{ padding: 0 }}
+        styles={{ body: { padding: 0 } }}
         title={
           <div
             style={{

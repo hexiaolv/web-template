@@ -14,7 +14,6 @@ import {
   Card,
   Col,
   Empty,
-  List,
   Modal,
   message,
   Row,
@@ -201,7 +200,7 @@ const TasksCenter: React.FC = () => {
 
       <Card
         className={styles.tasksCard}
-        bodyStyle={{ padding: 0 }}
+        styles={{ body: { padding: 0 } }}
         title={
           <div
             style={{
@@ -222,10 +221,9 @@ const TasksCenter: React.FC = () => {
               <Empty description="当前科室及业务域下暂无需要您处理的待办事项" />
             </div>
           ) : (
-            <List
-              dataSource={tasks}
-              renderItem={(item: any) => (
-                <div className={styles.listItem}>
+            <>
+              {tasks.map((item: any) => (
+                <div key={item.id} className={styles.listItem}>
                   <Row gutter={16} align="middle">
                     <Col span={18}>
                       <Space size="middle" style={{ marginBottom: 4 }}>
@@ -288,8 +286,8 @@ const TasksCenter: React.FC = () => {
                     </Col>
                   </Row>
                 </div>
-              )}
-            />
+              ))}
+            </>
           )}
         </Spin>
       </Card>

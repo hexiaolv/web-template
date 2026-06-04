@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
 import { useModel, useRequest } from '@umijs/max';
-import { Badge, Card, Col, Empty, List, Row, Space, Spin, Tabs } from 'antd';
+import { Badge, Card, Col, Empty, Row, Space, Spin, Tabs } from 'antd';
 import { createStyles } from 'antd-style';
 import React, { useState } from 'react';
 
@@ -156,7 +156,7 @@ const MessageCenter: React.FC = () => {
         </Row>
       </Card>
 
-      <Card className={styles.msgCard} bodyStyle={{ padding: 0 }}>
+      <Card className={styles.msgCard} styles={{ body: { padding: 0 } }}>
         <Tabs
           activeKey={activeTab}
           onChange={setActiveTab}
@@ -220,10 +220,9 @@ const MessageCenter: React.FC = () => {
               <Empty description="暂无符合当前权限隔离口径的公告或通知" />
             </div>
           ) : (
-            <List
-              dataSource={currentList}
-              renderItem={(item: any) => (
-                <div className={styles.listItem}>
+            <>
+              {currentList.map((item: any) => (
+                <div key={item.id} className={styles.listItem}>
                   <Row gutter={16} align="middle">
                     <Col span={2}>{renderMessageIcon(item.category)}</Col>
                     <Col span={22}>
@@ -244,8 +243,8 @@ const MessageCenter: React.FC = () => {
                     </Col>
                   </Row>
                 </div>
-              )}
-            />
+              ))}
+            </>
           )}
         </Spin>
       </Card>
