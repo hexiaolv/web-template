@@ -1,0 +1,125 @@
+import { defineMock } from '@umijs/max';
+
+export default defineMock({
+  'GET /api/base/c-material/udi': (req: any, res: any) => {
+    const { keyword, status, current = 1, pageSize = 10 } = req.query;
+
+    const allItems = [
+      {
+        id: 'UDI-001',
+        udiCode: '06921394000013202506A',
+        diCode: '06921394000013',
+        batchNo: '2025A0601',
+        serialNo: 'SN001001',
+        productionDate: '2025-06-01',
+        expiryDate: '2027-06-01',
+        itemName: '一次性使用医用口罩',
+        itemCode: 'HC20250001',
+        spec: '17.5cm×9.5cm',
+        manufacturer: '浙江振德医疗用品有限公司',
+        status: 'registered',
+        statusName: '已注册',
+        createTime: '2025-06-01 10:00:00',
+      },
+      {
+        id: 'UDI-002',
+        udiCode: '06921394000020202505B',
+        diCode: '06921394000020',
+        batchNo: '2025B0515',
+        serialNo: 'SN002001',
+        productionDate: '2025-05-15',
+        expiryDate: '2028-05-15',
+        itemName: '一次性使用无菌注射器',
+        itemCode: 'HC20250002',
+        spec: '5ml',
+        manufacturer: '江西洪达医疗器械集团有限公司',
+        status: 'registered',
+        statusName: '已注册',
+        createTime: '2025-05-20 09:00:00',
+      },
+      {
+        id: 'UDI-003',
+        udiCode: '06921394000037202504C',
+        diCode: '06921394000037',
+        batchNo: '2025C0410',
+        serialNo: 'SN003001',
+        productionDate: '2025-04-10',
+        expiryDate: '2028-04-10',
+        itemName: '医用手套（有粉）',
+        itemCode: 'HC20250003',
+        spec: 'M码',
+        manufacturer: '英科医疗科技股份有限公司',
+        status: 'pending',
+        statusName: '待审核',
+        createTime: '2025-05-10 14:00:00',
+      },
+      {
+        id: 'UDI-004',
+        udiCode: '06921394000044202503D',
+        diCode: '06921394000044',
+        batchNo: '2025D0301',
+        serialNo: 'SN004001',
+        productionDate: '2025-03-01',
+        expiryDate: '2027-03-01',
+        itemName: '一次性使用输液器',
+        itemCode: 'HC20250004',
+        spec: '带针',
+        manufacturer: '山东威高集团医用高分子制品股份有限公司',
+        status: 'registered',
+        statusName: '已注册',
+        createTime: '2025-03-15 10:00:00',
+      },
+      {
+        id: 'UDI-005',
+        udiCode: '06921394000051202412E',
+        diCode: '06921394000051',
+        batchNo: '2024E1220',
+        serialNo: 'SN005001',
+        productionDate: '2024-12-20',
+        expiryDate: '2025-12-20',
+        itemName: '心电监护电极片',
+        itemCode: 'HC20250005',
+        spec: '成人型',
+        manufacturer: '深圳理邦精密仪器股份有限公司',
+        status: 'cancelled',
+        statusName: '已注销',
+        createTime: '2024-12-25 09:00:00',
+      },
+      {
+        id: 'UDI-006',
+        udiCode: '06921394000068202506F',
+        diCode: '06921394000068',
+        batchNo: '2025F0601',
+        serialNo: 'SN006001',
+        productionDate: '2025-06-01',
+        expiryDate: '2030-06-01',
+        itemName: '骨科创伤钢板',
+        itemCode: 'HC20250006',
+        spec: '6孔 120mm',
+        manufacturer: '大博医疗科技股份有限公司',
+        status: 'registered',
+        statusName: '已注册',
+        createTime: '2025-06-02 11:00:00',
+      },
+    ];
+
+    let filtered = allItems;
+    if (status) filtered = filtered.filter((i) => i.status === status);
+    if (keyword) {
+      filtered = filtered.filter(
+        (i) =>
+          i.udiCode.includes(keyword) ||
+          i.itemName.includes(keyword) ||
+          i.itemCode.includes(keyword),
+      );
+    }
+
+    const start = (Number(current) - 1) * Number(pageSize);
+    const data = filtered.slice(start, start + Number(pageSize));
+    res.json({ data, total: filtered.length, success: true });
+  },
+
+  'POST /api/base/c-material/udi': (_req: any, res: any) => {
+    res.json({ success: true, message: 'UDI记录已保存' });
+  },
+});

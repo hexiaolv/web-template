@@ -1,0 +1,172 @@
+import { defineMock } from '@umijs/max';
+
+export default defineMock({
+  'GET /api/base/price/list': (req: any, res: any) => {
+    const {
+      keyword,
+      priceType,
+      status,
+      current = 1,
+      pageSize = 10,
+    } = req.query;
+
+    const allItems = [
+      {
+        id: 'PL-001',
+        itemCode: 'HC20250001',
+        itemName: '一次性使用医用口罩',
+        spec: '17.5cm×9.5cm',
+        supplierName: '浙江振德医疗用品有限公司',
+        currentPrice: 0.45,
+        previousPrice: 0.48,
+        effectDate: '2025-01-01',
+        expiryDate: '2026-12-31',
+        priceType: 'agreement',
+        priceTypeName: '协议价',
+        domain: 'consumable',
+        status: 'active',
+        statusName: '生效中',
+        createTime: '2024-12-20 09:00:00',
+      },
+      {
+        id: 'PL-002',
+        itemCode: 'HC20250002',
+        itemName: '一次性使用无菌注射器',
+        spec: '5ml',
+        supplierName: '江西洪达医疗器械集团有限公司',
+        currentPrice: 0.38,
+        previousPrice: 0.42,
+        effectDate: '2025-01-01',
+        expiryDate: '2026-12-31',
+        priceType: 'agreement',
+        priceTypeName: '协议价',
+        domain: 'consumable',
+        status: 'active',
+        statusName: '生效中',
+        createTime: '2024-12-20 09:00:00',
+      },
+      {
+        id: 'PL-003',
+        itemCode: 'YP20250001',
+        itemName: '注射用头孢曲松钠',
+        spec: '1g/瓶',
+        supplierName: '国药控股广州有限公司',
+        currentPrice: 5.8,
+        previousPrice: 6.2,
+        effectDate: '2025-03-01',
+        expiryDate: '2026-02-28',
+        priceType: 'bid',
+        priceTypeName: '中标价',
+        domain: 'medicine',
+        status: 'active',
+        statusName: '生效中',
+        createTime: '2025-02-15 10:00:00',
+      },
+      {
+        id: 'PL-004',
+        itemCode: 'YP20250003',
+        itemName: '舒芬太尼注射液',
+        spec: '1ml:50μg',
+        supplierName: '宜昌人福药业有限责任公司',
+        currentPrice: 42,
+        previousPrice: 42,
+        effectDate: '2024-06-01',
+        expiryDate: '2026-05-31',
+        priceType: 'listed',
+        priceTypeName: '挂网价',
+        domain: 'medicine',
+        status: 'active',
+        statusName: '生效中',
+        createTime: '2024-05-20 09:00:00',
+      },
+      {
+        id: 'PL-005',
+        itemCode: 'HC20250006',
+        itemName: '骨科创伤钢板',
+        spec: '6孔 120mm',
+        supplierName: '大博医疗科技股份有限公司',
+        currentPrice: 850,
+        previousPrice: 920,
+        effectDate: '2025-04-01',
+        expiryDate: '2026-03-31',
+        priceType: 'bid',
+        priceTypeName: '中标价',
+        domain: 'consumable',
+        status: 'active',
+        statusName: '生效中',
+        createTime: '2025-03-15 10:00:00',
+      },
+      {
+        id: 'PL-006',
+        itemCode: 'YP20250006',
+        itemName: '阿司匹林肠溶片',
+        spec: '100mg×30片',
+        supplierName: '国药控股广州有限公司',
+        currentPrice: 15.6,
+        previousPrice: 18.2,
+        effectDate: '2025-05-01',
+        expiryDate: '2027-04-30',
+        priceType: 'listed',
+        priceTypeName: '挂网价',
+        domain: 'medicine',
+        status: 'active',
+        statusName: '生效中',
+        createTime: '2025-04-20 09:00:00',
+      },
+      {
+        id: 'PL-007',
+        itemCode: 'HC20250004',
+        itemName: '一次性使用输液器',
+        spec: '带针',
+        supplierName: '山东威高集团医用高分子制品股份有限公司',
+        currentPrice: 1.2,
+        previousPrice: 1.35,
+        effectDate: '2024-01-01',
+        expiryDate: '2024-12-31',
+        priceType: 'agreement',
+        priceTypeName: '协议价',
+        domain: 'consumable',
+        status: 'expired',
+        statusName: '已过期',
+        createTime: '2023-12-15 09:00:00',
+      },
+      {
+        id: 'PL-008',
+        itemCode: 'YP20250007',
+        itemName: '胰岛素注射液',
+        spec: '3ml:300IU',
+        supplierName: '国药控股广州有限公司',
+        currentPrice: 68,
+        previousPrice: 72,
+        effectDate: '2025-07-01',
+        expiryDate: '2027-06-30',
+        priceType: 'bid',
+        priceTypeName: '中标价',
+        domain: 'medicine',
+        status: 'pending',
+        statusName: '待生效',
+        createTime: '2025-06-01 10:00:00',
+      },
+    ];
+
+    let filtered = allItems;
+    if (priceType) filtered = filtered.filter((i) => i.priceType === priceType);
+    if (status) filtered = filtered.filter((i) => i.status === status);
+    if (keyword) {
+      filtered = filtered.filter(
+        (i) =>
+          i.itemName.includes(keyword) ||
+          i.supplierName.includes(keyword) ||
+          i.itemCode.includes(keyword),
+      );
+    }
+
+    const start = (Number(current) - 1) * Number(pageSize);
+    const data = filtered.slice(start, start + Number(pageSize));
+    res.json({ data, total: filtered.length, success: true });
+  },
+
+  'POST /api/base/price/list': (_req: any, res: any) => {
+    res.json({ success: true, message: '价格条目已保存' });
+  },
+});
