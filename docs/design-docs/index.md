@@ -7,6 +7,7 @@
 | 文档 | 描述 | 状态 |
 |------|------|------|
 | [core-beliefs.md](./core-beliefs.md) | 工程核心信念与原则 | 有效 |
+| [2026-06-03-login-redesign.design.md](./2026-06-03-login-redesign.design.md) | 登录页美化与无滚动条重构 | 进行中 |
 
 ## 写作规范
 

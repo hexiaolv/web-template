@@ -61,22 +61,13 @@ export default {
   'POST /api/login/account': async (req: Request, res: Response) => {
     const { password, username, type } = req.body;
     await waitTime(2000);
-    if (password === 'ant.design' && username === 'admin') {
+    if (password === 'ant.design' && ['admin', 'user', 'nurse_user', 'head_user', 'yangan_user'].includes(username)) {
       res.send({
         status: 'ok',
         type,
-        currentAuthority: 'admin',
+        currentAuthority: username === 'user' ? 'user' : 'admin',
       });
-      access = 'admin';
-      return;
-    }
-    if (password === 'ant.design' && username === 'user') {
-      res.send({
-        status: 'ok',
-        type,
-        currentAuthority: 'user',
-      });
-      access = 'user';
+      access = username === 'user' ? 'user' : 'admin';
       return;
     }
     if (type === 'mobile') {

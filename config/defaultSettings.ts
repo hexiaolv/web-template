@@ -12,16 +12,16 @@ const Settings: ProLayoutProps & {
   homeTabPath?: string;
 } = {
   navTheme: 'light',
-  // 拂晓蓝
-  colorPrimary: '#1890ff',
+  // 湖青色 (呼应logo色彩)
+  colorPrimary: '#25B7AA',
   layout: 'mix',
   contentWidth: 'Fluid',
   fixedHeader: false,
   fixSiderbar: true,
   colorWeak: false,
-  title: 'Ant Design Pro',
+  title: 'SPD供应链管理平台',
   pwa: true,
-  logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
+  logo: '/images/logo2.png',
   iconfontUrl: '',
   tabsLayout: true,
   homeTabPath: '/',

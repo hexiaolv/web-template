@@ -55,3 +55,5 @@ build
 # env files
 .env.local
 .env.*.local
+
+.playwright-mcp

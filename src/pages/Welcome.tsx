@@ -1,79 +1,382 @@
+import {
+  ClockCircleOutlined,
+  CompassOutlined,
+  DatabaseOutlined,
+  DollarOutlined,
+  HomeOutlined,
+  PartitionOutlined,
+  SafetyOutlined,
+  SlidersOutlined,
+} from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
+import { useModel, useRequest } from '@umijs/max';
+import { Card, Col, Progress, Row, Spin, Table, Tag } from 'antd';
+import { createStyles } from 'antd-style';
 import React from 'react';
 
-interface InfoCardProps {
-  title: string;
-  index: number;
-  desc: string;
-  href: string;
-}
+const useStyles = createStyles(() => {
+  return {
+    contextCard: {
+      background: 'linear-gradient(135deg, #f0faf9 0%, #e6f2f0 100%)',
+      borderRadius: '12px',
+      border: '1px solid rgba(37, 183, 170, 0.25)',
+      marginBottom: '20px',
+    },
+    contextItem: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
+      fontSize: '14px',
+      color: '#595959',
+    },
+    contextValue: {
+      fontWeight: 600,
+      color: '#25B7AA',
+    },
+    metricCard: {
+      borderRadius: '12px',
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.02)',
+      border: '1px solid #f0f0f0',
+      transition: 'all 0.3s',
+      '&:hover': {
+        transform: 'translateY(-2px)',
+        boxShadow: '0 6px 16px rgba(0, 0, 0, 0.05)',
+      },
+    },
+    metricTitle: {
+      fontSize: '13px',
+      color: '#8c8c8c',
+      marginBottom: '8px',
+    },
+    metricValue: {
+      fontSize: '28px',
+      fontWeight: 700,
+      color: '#262626',
+      lineHeight: '1.2',
+    },
+    metricSub: {
+      fontSize: '12px',
+      color: '#52c41a',
+      marginTop: '8px',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '4px',
+    },
+  };
+});
 
-const InfoCard: React.FC<InfoCardProps> = ({ title, index, desc, href }) => (
-  <a
-    href={href}
-    target="_blank"
-    rel="noreferrer"
-    className="block h-full rounded-lg border border-solid border-gray-200 p-5 transition-shadow hover:shadow-md dark:border-gray-700"
-  >
-    <div className="flex items-start gap-4">
-      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-[#1677ff] text-2xl font-bold text-white">
-        {index}
-      </div>
-      <div className="min-w-0 flex-1">
-        <h4 className="mb-2 mt-0 text-base font-semibold">{title}</h4>
-        <p className="mb-0 line-clamp-2 text-sm text-gray-500 dark:text-gray-400">
-          {desc}
-        </p>
-      </div>
-    </div>
-  </a>
-);
+const Welcome: React.FC = () => {
+  const { styles } = useStyles();
+  const { initialState } = useModel('@@initialState');
 
-const Welcome: React.FC = () => (
-  <PageContainer>
-    <div className="rounded-lg border border-solid border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-[#141414]">
-      <div className="mb-10 text-center">
-        <h2 className="mb-4 text-2xl font-semibold">欢迎使用 Ant Design Pro</h2>
-        <p className="mx-auto max-w-[600px] text-base text-gray-500 dark:text-gray-400">
-          Ant Design Pro 是一个整合了 umi，Ant Design 和
-          ProComponents的脚手架方案。致力于在设计规范和基础组件的基础上，继续向上构建，提炼出典型模板/业务组件/配套设计资源，进一步提升企业级中后台产品设计研发过程中的『用户』和『设计者』的体验。
-        </p>
-      </div>
+  const currentBranch = initialState?.currentBranch || '主院区';
+  const currentDomain = initialState?.currentDomain || 'consumable';
+  const currentDept = initialState?.currentDept || '全院';
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        <InfoCard
-          index={1}
-          href="https://umijs.org/docs/introduce/introduce"
-          title="了解 umi"
-          desc="umi 是一个可扩展的企业级前端应用框架,umi 以路由为基础的，同时支持配置式路由和约定式路由，保证路由的功能完备，并以此进行功能扩展。"
-        />
-        <InfoCard
-          index={2}
-          title="了解 ant design"
-          href="https://ant.design"
-          desc="antd 是基于 Ant Design 设计体系的 React UI 组件库，主要用于研发企业级中后台产品。"
-        />
-        <InfoCard
-          index={3}
-          title="了解 Pro Components"
-          href="https://procomponents.ant.design"
-          desc="ProComponents 是一个基于 Ant Design 做了更高抽象的模板组件，以 一个组件就是一个页面为开发理念，为中后台开发带来更好的体验。"
-        />
-      </div>
+  // 根据当前的多维度上下文动态请求 Mock 指标数据
+  const { data: overview, loading } = useRequest(
+    {
+      url: '/api/dashboard/overview',
+      method: 'GET',
+      params: {
+        branch: currentBranch,
+        domain: currentDomain,
+        dept: currentDept,
+      },
+    },
+    {
+      refreshDeps: [currentBranch, currentDomain, currentDept],
+    },
+  );
 
-      <div className="mt-10 border-t border-gray-100 pt-6 text-center text-sm text-gray-500 dark:border-gray-700 dark:text-gray-400">
-        更多文档请访问：{' '}
-        <a
-          href="https://pro.ant.design"
-          target="_blank"
-          rel="noreferrer"
-          className="text-[#1677ff] hover:text-[#4096ff]"
-        >
-          Pro 官方文档
-        </a>
-      </div>
-    </div>
-  </PageContainer>
-);
+  // 1. 获取拟真周转排行表格数据 (根据业务域隔离)
+  const getInventoryTurnData = () => {
+    if (currentDomain === 'medicine') {
+      return [
+        {
+          key: '1',
+          name: '葡萄糖注射液 500ml',
+          cat: '大输液类',
+          days: 4.2,
+          status: '高效周转',
+          rate: 92,
+        },
+        {
+          key: '2',
+          name: '阿莫西林胶囊 0.25g',
+          cat: '口服抗生素',
+          days: 12.8,
+          status: '周转正常',
+          rate: 78,
+        },
+        {
+          key: '3',
+          name: '注射用盐酸瑞芬太尼',
+          cat: '特管麻醉药',
+          days: 22.5,
+          status: '限额监控',
+          rate: 60,
+        },
+        {
+          key: '4',
+          name: '冷藏胰岛素注射液',
+          cat: '温湿度冷链药',
+          days: 8.4,
+          status: '重点周转',
+          rate: 85,
+        },
+      ];
+    }
+    // 耗材域
+    return [
+      {
+        key: '1',
+        name: '医用外科口罩 (挂耳式)',
+        cat: '普通低值耗材',
+        days: 3.5,
+        status: '高效周转',
+        rate: 95,
+      },
+      {
+        key: '2',
+        name: '一次性无菌手术衣(大)',
+        cat: '定数包耗材',
+        days: 9.8,
+        status: '周转正常',
+        rate: 82,
+      },
+      {
+        key: '3',
+        name: '钛合金锁定骨板 4孔',
+        cat: '高值跟台耗材',
+        days: 45.0,
+        status: '备货充足',
+        rate: 45,
+      },
+      {
+        key: '4',
+        name: 'ECMO体外膜肺氧合管路',
+        cat: '重症高值介入',
+        days: 28.2,
+        status: '安全水位',
+        rate: 58,
+      },
+    ];
+  };
+
+  // 2. 获取科室消耗分布 (根据科室隔离)
+  const getDeptConsumeData = () => {
+    if (currentDept === '全院' || currentDept === '全院汇总只读') {
+      return [
+        { dept: 'ICU重症监护科', val: '¥48.2万', count: 1420, timely: '99.2%' },
+        { dept: '骨科手术室', val: '¥85.4万', count: 980, timely: '98.8%' },
+        { dept: '外科病区', val: '¥32.1万', count: 2100, timely: '99.5%' },
+        { dept: '妇产科病区', val: '¥22.8万', count: 850, timely: '97.6%' },
+      ];
+    }
+    // 单科室视角
+    return [{ dept: currentDept, val: '¥28.4万', count: 680, timely: '99.4%' }];
+  };
+
+  return (
+    <PageContainer>
+      <Spin spinning={loading}>
+        {/* SPD 运行时状态看板 */}
+        <Card className={styles.contextCard}>
+          <Row gutter={24} align="middle">
+            <Col xs={24} sm={8}>
+              <div className={styles.contextItem}>
+                <HomeOutlined style={{ color: '#25B7AA', fontSize: '16px' }} />
+                <span>当前分析院区:</span>
+                <span className={styles.contextValue}>{currentBranch}</span>
+              </div>
+            </Col>
+            <Col xs={24} sm={8}>
+              <div className={styles.contextItem}>
+                <CompassOutlined
+                  style={{ color: '#25B7AA', fontSize: '16px' }}
+                />
+                <span>监测业务域:</span>
+                <span className={styles.contextValue}>
+                  {currentDomain === 'consumable'
+                    ? '🩺 医用耗材业务'
+                    : '💊 药品/制剂业务'}
+                </span>
+              </div>
+            </Col>
+            <Col xs={24} sm={8}>
+              <div className={styles.contextItem}>
+                <PartitionOutlined
+                  style={{ color: '#25B7AA', fontSize: '16px' }}
+                />
+                <span>统计科室范围:</span>
+                <span className={styles.contextValue}>{currentDept}</span>
+              </div>
+            </Col>
+          </Row>
+        </Card>
+
+        {/* 核心运营指标卡 */}
+        <Row gutter={16} style={{ marginBottom: '20px' }}>
+          <Col xs={24} sm={8}>
+            <Card className={styles.metricCard}>
+              <div className={styles.metricTitle}>
+                <DollarOutlined style={{ marginRight: 6, color: '#1890ff' }} />
+                本月物资领用总值
+              </div>
+              <div className={styles.metricValue}>
+                {overview?.totalSpend || '¥0.00'}
+              </div>
+              <div className={styles.metricSub}>
+                <span>较上月同期: +4.2%</span>
+              </div>
+            </Card>
+          </Col>
+          <Col xs={24} sm={8}>
+            <Card className={styles.metricCard}>
+              <div className={styles.metricTitle}>
+                <ClockCircleOutlined
+                  style={{ marginRight: 6, color: '#52c41a' }}
+                />
+                二级临床库房周转天数
+              </div>
+              <div className={styles.metricValue}>
+                {overview?.turnDays || 0} 天
+              </div>
+              <div className={styles.metricSub} style={{ color: '#ff4d4f' }}>
+                <span>周转率较上周加速：-0.8 天</span>
+              </div>
+            </Card>
+          </Col>
+          <Col xs={24} sm={8}>
+            <Card className={styles.metricCard}>
+              <div className={styles.metricTitle}>
+                <SafetyOutlined style={{ marginRight: 6, color: '#fa8c16' }} />
+                科室请领配发满意度
+              </div>
+              <div className={styles.metricValue}>
+                {overview?.SatisfactionRate || 0}%
+              </div>
+              <div className={styles.metricSub}>
+                <span>物流履约配送及时率保持极优</span>
+              </div>
+            </Card>
+          </Col>
+        </Row>
+
+        {/* 中间看板区域 */}
+        <Row gutter={24}>
+          <Col xs={24} md={14}>
+            <Card
+              title={
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    fontSize: '15px',
+                    fontWeight: 600,
+                  }}
+                >
+                  <SlidersOutlined style={{ color: '#1890ff' }} />
+                  <span>科室领用及配发实效监测</span>
+                </div>
+              }
+              extra={<Tag color="processing">院内流转监控</Tag>}
+              style={{ marginBottom: '24px', minHeight: '360px' }}
+            >
+              <div
+                style={{ marginBottom: 12, fontSize: '13px', color: '#8c8c8c' }}
+              >
+                实时监测二级库房的领用总值与配送实效（根据您切换的科室权限进行隔离展示）：
+              </div>
+              <Table
+                dataSource={getDeptConsumeData()}
+                rowKey="dept"
+                pagination={false}
+                size="small"
+                columns={[
+                  { title: '临床病区科室', dataIndex: 'dept', key: 'dept' },
+                  { title: '本月领用金额', dataIndex: 'val', key: 'val' },
+                  { title: '消耗物资件数', dataIndex: 'count', key: 'count' },
+                  {
+                    title: '配送及时率',
+                    dataIndex: 'timely',
+                    key: 'timely',
+                    render: (text) => (
+                      <span style={{ fontWeight: 600, color: '#52c41a' }}>
+                        {text}
+                      </span>
+                    ),
+                  },
+                ]}
+              />
+            </Card>
+          </Col>
+
+          <Col xs={24} md={10}>
+            <Card
+              title={
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    fontSize: '15px',
+                    fontWeight: 600,
+                  }}
+                >
+                  <DatabaseOutlined style={{ color: '#52c41a' }} />
+                  <span>重点物资库存周转与周转率监测</span>
+                </div>
+              }
+              extra={<Tag color="success">周转率分析</Tag>}
+              style={{ marginBottom: '24px', minHeight: '360px' }}
+            >
+              <div
+                style={{ marginBottom: 12, fontSize: '13px', color: '#8c8c8c' }}
+              >
+                展示当前业务域下常用物资的平均周转天数和库存健康度：
+              </div>
+              <Table
+                dataSource={getInventoryTurnData()}
+                rowKey="key"
+                pagination={false}
+                size="small"
+                columns={[
+                  {
+                    title: '规格品名',
+                    dataIndex: 'name',
+                    key: 'name',
+                    ellipsis: true,
+                  },
+                  {
+                    title: '平均周转天数',
+                    dataIndex: 'days',
+                    key: 'days',
+                    render: (val) => `${val} 天`,
+                  },
+                  {
+                    title: '健康指数',
+                    key: 'rate',
+                    render: (_, record) => (
+                      <div style={{ width: '80px' }}>
+                        <Progress
+                          percent={record.rate}
+                          size="small"
+                          strokeColor={record.rate > 80 ? '#52c41a' : '#fa8c16'}
+                        />
+                      </div>
+                    ),
+                  },
+                ]}
+              />
+            </Card>
+          </Col>
+        </Row>
+      </Spin>
+    </PageContainer>
+  );
+};
 
 export default Welcome;

@@ -86,3 +86,84 @@ ol {
     }
   }
 }
+
+/* 全局隐藏 PageContainer/PageHeader 页标题以只保留面包屑 */
+.ant-page-header-heading,
+.ant-pro-page-container-title,
+.ant-pro-page-container-warp .ant-page-header-heading {
+  display: none !important;
+}
+
+/* 已打开的页面，菜单栏选中样式定制 (淡蓝填充背景、左侧深蓝直角竖线) */
+.ant-menu-light .ant-menu-item-selected,
+.ant-menu-light.ant-menu-inline .ant-menu-item-selected,
+.ant-menu-item.ant-menu-item-selected {
+  background-color: #e6f7ff !important;
+  border-left: 3px solid #1890ff !important;
+  border-radius: 0 !important; /* 强制直角以贴边 */
+  margin-inline: 0 !important; /* 宽度铺满 */
+  width: 100% !important;
+}
+
+/* 选中菜单项的图标和文字颜色统一为深蓝色 */
+.ant-menu-item-selected .menu-item-title-text,
+.ant-menu-item-selected .menu-item-icon-wrapper .anticon {
+  color: #1890ff !important;
+}
+
+/* 未选中的菜单项加上透明左边框，避免在选中状态切换时产生抖动 */
+.ant-menu-item {
+  border-left: 3px solid transparent;
+  transition: border-color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+}
+
+/* 隐藏原生顶部/侧边折叠按钮 */
+.ant-pro-sider-collapsed-button {
+  display: none !important;
+}
+
+/* 顶部导航自适应响应式自动隐藏/收缩机制 */
+@media (max-width: 1200px) {
+  /* 隐藏 logo 旁文字标题 */
+  .ant-pro-global-header-logo h1 {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1050px) {
+  /* 上下文标签只显示图标，隐藏文本及下拉箭头 */
+  .header-branch-tag,
+  .header-domain-tag,
+  .header-dept-tag {
+    padding: 5px 8px !important;
+    .tag-text,
+    .tag-arrow {
+      display: none !important;
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  /* 隐藏头像旁用户名和职位 */
+  .header-user-info {
+    display: none !important;
+  }
+}
+
+@media (max-width: 750px) {
+  /* 彻底隐藏三个上下文标签与对应竖线分隔符 */
+  .header-branch-tag,
+  .header-domain-tag,
+  .header-dept-tag,
+  .header-separator {
+    display: none !important;
+  }
+}
+
+/* 优化右上角头像左右两侧的空白边距 */
+.ant-pro-global-header-header-actions-avatar {
+  padding: 0 4px !important;
+}
+
+
+
