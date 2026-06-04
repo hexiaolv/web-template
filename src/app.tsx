@@ -14,7 +14,7 @@ import {
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { SettingDrawer } from '@ant-design/pro-components';
 import type { RequestConfig, RunTimeLayoutConfig } from '@umijs/max';
-import { history, Link, useLocation, useModel } from '@umijs/max';
+import { getIntl, history, Link, useLocation, useModel } from '@umijs/max';
 import { Badge, Button, Dropdown, Popover, Space, Tag } from 'antd';
 import React, { useEffect, useState } from 'react';
 import Footer from '@/components/Footer';
@@ -517,36 +517,8 @@ export const layout: RunTimeLayoutConfig = ({
   initialState,
   setInitialState,
 }) => {
-  // 监听 sider 的折叠状态并同步到 initialState 中以解决分组模式收起时的菜单混乱
-  if (typeof window !== 'undefined' && !(window as any).hasSiderObserver) {
-    (window as any).hasSiderObserver = true;
-    const checkCollapsed = () => {
-      const sider = document.querySelector('.ant-layout-sider');
-      if (sider) {
-        const isCollapsed = sider.classList.contains(
-          'ant-layout-sider-collapsed',
-        );
-        if ((window as any).isCollapsed !== isCollapsed) {
-          (window as any).isCollapsed = isCollapsed;
-          setInitialState((s) => ({ ...s, collapsed: isCollapsed }));
-        }
-      }
-    };
-    const observer = new MutationObserver(checkCollapsed);
-    observer.observe(document.body, {
-      attributes: true,
-      subtree: true,
-      attributeFilter: ['class'],
-    });
-
-    // 立即执行和多阶段延迟执行检测，确保初始渲染和自动折叠状态同步
-    checkCollapsed();
-    setTimeout(checkCollapsed, 100);
-    setTimeout(checkCollapsed, 500);
-    setTimeout(checkCollapsed, 1000);
-  }
-
   return {
+    collapsed: initialState?.collapsed,
     headerContentRender: () => {
       const currentBranch = initialState?.currentBranch || '主院区';
       const currentDomain = initialState?.currentDomain || 'consumable';
@@ -841,6 +813,7 @@ export const layout: RunTimeLayoutConfig = ({
       <MessageButton key="message" />,
       <Question key="help" />,
       <FullscreenButton key="fullscreen" />,
+      <SelectLang key="SelectLang" />,
       <span
         key="divider"
         style={{
@@ -942,6 +915,10 @@ export const layout: RunTimeLayoutConfig = ({
       const { path } = item;
       if (!path) return dom;
 
+      const displayName = item.locale
+        ? getIntl().formatMessage({ id: item.locale })
+        : item.name;
+
       let iconDom = null;
       if (item.icon) {
         if (typeof item.icon === 'string') {
@@ -1030,7 +1007,7 @@ export const layout: RunTimeLayoutConfig = ({
             }}
           >
             <span className="menu-item-title-text" style={{ display: 'none' }}>
-              {item.name}
+              {displayName}
             </span>
           </span>
         )
@@ -1054,7 +1031,7 @@ export const layout: RunTimeLayoutConfig = ({
             {iconDom}
           </span>
           <span className="menu-item-title-text" style={{ flex: 1 }}>
-            {item.name}
+            {displayName}
           </span>
           {badgeDom}
         </span>
@@ -1067,7 +1044,7 @@ export const layout: RunTimeLayoutConfig = ({
           }}
         >
           <span className="menu-item-title-text" style={{ flex: 1 }}>
-            {item.name}
+            {displayName}
           </span>
           {badgeDom}
         </span>
@@ -1200,7 +1177,7 @@ export const layout: RunTimeLayoutConfig = ({
       }
       return menuData || [];
     },
-    onCollapse: (collapsed) => {
+    onCollapse: (collapsed: boolean) => {
       setInitialState((s) => ({ ...s, collapsed }));
     },
     menuFooterRender: (props) => {
@@ -1254,4 +1231,19 @@ export const layout: RunTimeLayoutConfig = ({
 export const request: RequestConfig = {
   baseURL: '',
   ...errorConfig,
+};
+
+export const locale = {
+  onError: (err: any) => {
+    // 过滤 i18n 翻译缺失警告，避免控制台报错噪音
+    const errMsg = String(err);
+    if (
+      err?.code === 'MISSING_TRANSLATION' ||
+      errMsg.includes('Missing message') ||
+      errMsg.includes('MISSING_TRANSLATION')
+    ) {
+      return;
+    }
+    console.error(err);
+  },
 };

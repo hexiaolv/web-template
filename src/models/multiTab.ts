@@ -106,10 +106,7 @@ export default function useMultiTab(): MultiTabModel {
       const homeTab: TabItem = {
         path: homeInfo.path,
         file: homeInfo.file,
-        title: getIntl().formatMessage({
-          id: 'menu.home',
-          defaultMessage: '首页',
-        }),
+        title: '首页',
         icon: 'HomeOutlined',
         fixed: true,
         reloadKey: 0,

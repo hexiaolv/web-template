@@ -6,17 +6,22 @@ import pwa from './en-US/pwa';
 import settingDrawer from './en-US/settingDrawer';
 import settings from './en-US/settings';
 
+const unwrap = (mod: any) => {
+  if (!mod) return {};
+  return mod.default || mod;
+};
+
 export default {
   'navBar.lang': 'Languages',
   'layout.user.link.help': 'Help',
   'layout.user.link.privacy': 'Privacy',
   'layout.user.link.terms': 'Terms',
   'app.preview.down.block': 'Download this page to your local project',
-  ...globalHeader,
-  ...menu,
-  ...settingDrawer,
-  ...settings,
-  ...pwa,
-  ...component,
-  ...pages,
+  ...unwrap(globalHeader),
+  ...unwrap(menu),
+  ...unwrap(settingDrawer),
+  ...unwrap(settings),
+  ...unwrap(pwa),
+  ...unwrap(component),
+  ...unwrap(pages),
 };

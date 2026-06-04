@@ -269,7 +269,7 @@ export const Question: React.FC = () => {
         onCancel={() => setVisible(false)}
         footer={null}
         width={720}
-        bodyStyle={{ padding: '8px 24px 24px 24px' }}
+        styles={{ body: { padding: '8px 24px 24px 24px' } }}
       >
         <div
           style={{ color: '#8c8c8c', fontSize: '12px', marginBottom: '16px' }}
@@ -305,10 +305,12 @@ export const Question: React.FC = () => {
           </Button>,
         ]}
         width={680}
-        bodyStyle={{
-          maxHeight: '420px',
-          overflowY: 'auto',
-          padding: '16px 20px',
+        styles={{
+          body: {
+            maxHeight: '420px',
+            overflowY: 'auto',
+            padding: '16px 20px',
+          },
         }}
       >
         {renderPreviewContent(previewDoc)}

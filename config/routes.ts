@@ -8,7 +8,7 @@ export default [
     layout: false,
     routes: [
       {
-        name: '登录',
+        name: 'login',
         path: '/user/login',
         component: './user/login',
       },
@@ -20,7 +20,7 @@ export default [
   },
   {
     path: '/account/settings',
-    name: '个人设置',
+    name: 'settings',
     component: './account/settings',
     hideInMenu: true,
   },
@@ -28,35 +28,35 @@ export default [
   // ==================== 1. 工作台 ====================
   {
     path: '/dashboard',
-    name: '工作台',
+    name: 'dashboard',
     icon: 'AppstoreOutlined',
     routes: [
       {
-        name: '首页',
+        name: 'welcome',
         path: '/dashboard/welcome',
         icon: 'HomeOutlined',
         component: './Welcome',
       },
       {
-        name: '我的工作台',
+        name: 'desk',
         path: '/dashboard/desk',
         icon: 'DashboardOutlined',
         component: './Dashboard/Desk',
       },
       {
-        name: '消息中心',
+        name: 'message',
         path: '/dashboard/message',
         icon: 'BellOutlined',
         component: './Dashboard/Message',
       },
       {
-        name: '预警中心',
+        name: 'alarm',
         path: '/dashboard/alarm',
         icon: 'WarningOutlined',
         component: './Dashboard/Alarm',
       },
       {
-        name: '待办任务',
+        name: 'tasks',
         path: '/dashboard/tasks',
         icon: 'UnorderedListOutlined',
         component: './Dashboard/Tasks',
@@ -67,35 +67,35 @@ export default [
   // ==================== 2. 主数据管理 ====================
   {
     path: '/base',
-    name: '主数据管理',
+    name: 'base',
     icon: 'DatabaseOutlined',
     routes: [
       // 耗材端主数据分组 (isConsumableDomain)
       {
         path: '/base/c-material',
-        name: '耗材管理',
+        name: 'c-material',
         access: 'isConsumableDomain',
         routes: [
           {
-            name: '耗材目录',
+            name: 'items',
             path: '/base/c-material/items',
             icon: 'FileTextOutlined',
             component: './EmptyPage',
           },
           {
-            name: 'UDI管理',
+            name: 'udi',
             path: '/base/c-material/udi',
             icon: 'ScanOutlined',
             component: './EmptyPage',
           },
           {
-            name: '耗材分类维护',
+            name: 'category',
             path: '/base/c-material/category',
             icon: 'TagOutlined',
             component: './EmptyPage',
           },
           {
-            name: '计量单位维护',
+            name: 'unit',
             path: '/base/c-material/unit',
             icon: 'CalculatorOutlined',
             component: './EmptyPage',
@@ -105,29 +105,29 @@ export default [
       // 药品端主数据分组 (isMedicineDomain)
       {
         path: '/base/m-material',
-        name: '药品管理',
+        name: 'm-material',
         access: 'isMedicineDomain',
         routes: [
           {
-            name: '药品目录',
+            name: 'items',
             path: '/base/m-material/items',
             icon: 'FileTextOutlined',
             component: './EmptyPage',
           },
           {
-            name: '药品追溯码',
+            name: 'code',
             path: '/base/m-material/code',
             icon: 'ScanOutlined',
             component: './EmptyPage',
           },
           {
-            name: '药品分类维护',
+            name: 'category',
             path: '/base/m-material/category',
             icon: 'TagOutlined',
             component: './EmptyPage',
           },
           {
-            name: '计量单位维护',
+            name: 'unit',
             path: '/base/m-material/unit',
             icon: 'CalculatorOutlined',
             component: './EmptyPage',
@@ -137,22 +137,22 @@ export default [
       // 通用数据分组
       {
         path: '/base/supplier',
-        name: '供应商数据',
+        name: 'supplier',
         routes: [
           {
-            name: '供应商档案',
+            name: 'profile',
             path: '/base/supplier/profile',
             icon: 'IdcardOutlined',
             component: './EmptyPage',
           },
           {
-            name: '供应商证照',
+            name: 'certs',
             path: '/base/supplier/certs',
             icon: 'SafetyCertificateOutlined',
             component: './EmptyPage',
           },
           {
-            name: '供应商绩效',
+            name: 'kpi',
             path: '/base/supplier/kpi',
             icon: 'StarOutlined',
             component: './EmptyPage',
@@ -161,22 +161,22 @@ export default [
       },
       {
         path: '/base/price',
-        name: '价格数据',
+        name: 'price',
         routes: [
           {
-            name: '价格目录',
+            name: 'list',
             path: '/base/price/list',
             icon: 'DollarOutlined',
             component: './EmptyPage',
           },
           {
-            name: '调价申请',
+            name: 'apply',
             path: '/base/price/apply',
             icon: 'SwapOutlined',
             component: './EmptyPage',
           },
           {
-            name: '价格历史',
+            name: 'history',
             path: '/base/price/history',
             icon: 'LineChartOutlined',
             component: './EmptyPage',
@@ -189,27 +189,27 @@ export default [
   // ==================== 3. 采购管理 ====================
   {
     path: '/procurement',
-    name: '采购管理',
+    name: 'procurement',
     icon: 'ShoppingCartOutlined',
     routes: [
       {
         path: '/procurement/orders',
-        name: '计划与订单',
+        name: 'orders',
         routes: [
           {
-            name: '采购计划',
+            name: 'plan',
             path: '/procurement/orders/plan',
             icon: 'CalendarOutlined',
             component: './EmptyPage',
           },
           {
-            name: '采购订单',
+            name: 'list',
             path: '/procurement/orders/list',
             icon: 'FileTextOutlined',
             component: './EmptyPage',
           },
           {
-            name: '订单发送追踪',
+            name: 'track',
             path: '/procurement/orders/track',
             icon: 'SendOutlined',
             component: './EmptyPage',
@@ -218,16 +218,16 @@ export default [
       },
       {
         path: '/procurement/contract',
-        name: '合同与退货',
+        name: 'contract',
         routes: [
           {
-            name: '采购合同',
+            name: 'list',
             path: '/procurement/contract/list',
             icon: 'AuditOutlined',
             component: './EmptyPage',
           },
           {
-            name: '退货管理',
+            name: 'returns',
             path: '/procurement/contract/returns',
             icon: 'RollbackOutlined',
             component: './EmptyPage',
@@ -236,16 +236,16 @@ export default [
       },
       {
         path: '/procurement/check',
-        name: '验收',
+        name: 'check',
         routes: [
           {
-            name: '收货验收',
+            name: 'receiving',
             path: '/procurement/check/receiving',
             icon: 'InboxOutlined',
             component: './EmptyPage',
           },
           {
-            name: '质检记录',
+            name: 'qa',
             path: '/procurement/check/qa',
             icon: 'SafetyOutlined',
             component: './EmptyPage',
@@ -258,21 +258,21 @@ export default [
   // ==================== 4. 仓储管理 ====================
   {
     path: '/warehousing',
-    name: '仓储管理',
+    name: 'warehousing',
     icon: 'HomeOutlined',
     routes: [
       {
         path: '/warehousing/setup',
-        name: '库房管理',
+        name: 'setup',
         routes: [
           {
-            name: '货位管理',
+            name: 'location',
             path: '/warehousing/setup/location',
             icon: 'EnvironmentOutlined',
             component: './EmptyPage',
           },
           {
-            name: '温湿度监控',
+            name: 'temp',
             path: '/warehousing/setup/temp',
             icon: 'ExperimentOutlined',
             component: './EmptyPage',
@@ -281,22 +281,22 @@ export default [
       },
       {
         path: '/warehousing/io',
-        name: '入出库',
+        name: 'io',
         routes: [
           {
-            name: '入库管理',
+            name: 'in',
             path: '/warehousing/io/in',
             icon: 'LoginOutlined',
             component: './EmptyPage',
           },
           {
-            name: '出库管理',
+            name: 'out',
             path: '/warehousing/io/out',
             icon: 'LogoutOutlined',
             component: './EmptyPage',
           },
           {
-            name: '库存调拨',
+            name: 'transfer',
             path: '/warehousing/io/transfer',
             icon: 'BranchesOutlined',
             component: './EmptyPage',
@@ -305,16 +305,16 @@ export default [
       },
       {
         path: '/warehousing/stocktake',
-        name: '盘点与报损',
+        name: 'stocktake',
         routes: [
           {
-            name: '库存盘点',
+            name: 'check',
             path: '/warehousing/stocktake/check',
             icon: 'AuditOutlined',
             component: './EmptyPage',
           },
           {
-            name: '报损管理',
+            name: 'damage',
             path: '/warehousing/stocktake/damage',
             icon: 'DeleteOutlined',
             component: './EmptyPage',
@@ -323,22 +323,22 @@ export default [
       },
       {
         path: '/warehousing/query',
-        name: '库存查询',
+        name: 'query',
         routes: [
           {
-            name: '实时库存',
+            name: 'realtime',
             path: '/warehousing/query/realtime',
             icon: 'EyeOutlined',
             component: './EmptyPage',
           },
           {
-            name: '库存流水',
+            name: 'flow',
             path: '/warehousing/query/flow',
             icon: 'HistoryOutlined',
             component: './EmptyPage',
           },
           {
-            name: '库存预警',
+            name: 'alarm',
             path: '/warehousing/query/alarm',
             icon: 'AlertOutlined',
             component: './EmptyPage',
@@ -351,21 +351,21 @@ export default [
   // ==================== 5. 配送管理 ====================
   {
     path: '/distribution',
-    name: '配送管理',
+    name: 'distribution',
     icon: 'TruckOutlined',
     routes: [
       {
         path: '/distribution/package',
-        name: '定数包',
+        name: 'package',
         routes: [
           {
-            name: '定数包配置',
+            name: 'config',
             path: '/distribution/package/config',
             icon: 'GiftOutlined',
             component: './EmptyPage',
           },
           {
-            name: '标签打印',
+            name: 'print',
             path: '/distribution/package/print',
             icon: 'PrinterOutlined',
             component: './EmptyPage',
@@ -374,22 +374,22 @@ export default [
       },
       {
         path: '/distribution/deliver',
-        name: '申领配送',
+        name: 'deliver',
         routes: [
           {
-            name: '科室申领单',
+            name: 'request',
             path: '/distribution/deliver/request',
             icon: 'ShoppingOutlined',
             component: './EmptyPage',
           },
           {
-            name: '配送任务',
+            name: 'tasks',
             path: '/distribution/deliver/tasks',
             icon: 'InboxOutlined',
             component: './EmptyPage',
           },
           {
-            name: '配送路线',
+            name: 'routes',
             path: '/distribution/deliver/routes',
             icon: 'ForkOutlined',
             component: './EmptyPage',
@@ -398,10 +398,10 @@ export default [
       },
       {
         path: '/distribution/return',
-        name: '退库',
+        name: 'return',
         routes: [
           {
-            name: '科室退库',
+            name: 'dept',
             path: '/distribution/return/dept',
             icon: 'RollbackOutlined',
             component: './EmptyPage',
@@ -414,21 +414,21 @@ export default [
   // ==================== 6. 消耗追溯 ====================
   {
     path: '/trace',
-    name: '消耗追溯',
+    name: 'trace',
     icon: 'MedicineBoxOutlined',
     routes: [
       {
         path: '/trace/dept-store',
-        name: '科室库',
+        name: 'dept-store',
         routes: [
           {
-            name: '科室库存',
+            name: 'stock',
             path: '/trace/dept-store/stock',
             icon: 'GoldOutlined',
             component: './EmptyPage',
           },
           {
-            name: '取用记录',
+            name: 'record',
             path: '/trace/dept-store/record',
             icon: 'TransactionOutlined',
             component: './EmptyPage',
@@ -438,17 +438,17 @@ export default [
       // 耗材端专有
       {
         path: '/trace/surgery-c',
-        name: '手术室',
+        name: 'surgery-c',
         access: 'isConsumableDomain',
         routes: [
           {
-            name: '手术耗材管理',
+            name: 'items',
             path: '/trace/surgery-c/items',
             icon: 'ScissorOutlined',
             component: './EmptyPage',
           },
           {
-            name: '高值耗材收费',
+            name: 'charge',
             path: '/trace/surgery-c/charge',
             icon: 'DollarCircleOutlined',
             component: './EmptyPage',
@@ -458,17 +458,17 @@ export default [
       // 药品端专有
       {
         path: '/trace/surgery-m',
-        name: '手术室',
+        name: 'surgery-m',
         access: 'isMedicineDomain',
         routes: [
           {
-            name: '手术用药管理',
+            name: 'items',
             path: '/trace/surgery-m/items',
             icon: 'ScissorOutlined',
             component: './EmptyPage',
           },
           {
-            name: '特殊药品监管',
+            name: 'special',
             path: '/trace/surgery-m/special',
             icon: 'SafetyCertificateOutlined',
             component: './EmptyPage',
@@ -477,16 +477,16 @@ export default [
       },
       {
         path: '/trace/history',
-        name: '追溯',
+        name: 'history',
         routes: [
           {
-            name: '消耗追溯查询',
+            name: 'query',
             path: '/trace/history/query',
             icon: 'DeploymentUnitOutlined',
             component: './EmptyPage',
           },
           {
-            name: '患者级追溯',
+            name: 'patient',
             path: '/trace/history/patient',
             icon: 'UserOutlined',
             component: './EmptyPage',
@@ -495,10 +495,10 @@ export default [
       },
       {
         path: '/trace/his',
-        name: 'HIS对接',
+        name: 'his',
         routes: [
           {
-            name: '收费核对',
+            name: 'reconcile',
             path: '/trace/his/reconcile',
             icon: 'SyncOutlined',
             component: './EmptyPage',
@@ -511,27 +511,27 @@ export default [
   // ==================== 7. 财务结算 ====================
   {
     path: '/finance',
-    name: '财务结算',
+    name: 'finance',
     icon: 'FileTextOutlined',
     routes: [
       {
         path: '/finance/reconcile',
-        name: '对账',
+        name: 'reconcile',
         routes: [
           {
-            name: '结算对账单',
+            name: 'statement',
             path: '/finance/reconcile/statement',
             icon: 'FileExcelOutlined',
             component: './EmptyPage',
           },
           {
-            name: '在线对账确认',
+            name: 'confirm',
             path: '/finance/reconcile/confirm',
             icon: 'CheckCircleOutlined',
             component: './EmptyPage',
           },
           {
-            name: '对账异议处理',
+            name: 'dispute',
             path: '/finance/reconcile/dispute',
             icon: 'QuestionCircleOutlined',
             component: './EmptyPage',
@@ -540,16 +540,16 @@ export default [
       },
       {
         path: '/finance/invoice',
-        name: '发票',
+        name: 'invoice',
         routes: [
           {
-            name: '发票管理',
+            name: 'mgr',
             path: '/finance/invoice/mgr',
             icon: 'PayCircleOutlined',
             component: './EmptyPage',
           },
           {
-            name: '三单合一核对',
+            name: 'verify',
             path: '/finance/invoice/verify',
             icon: 'CopyOutlined',
             component: './EmptyPage',
@@ -559,23 +559,23 @@ export default [
       // 耗材端分析
       {
         path: '/finance/analysis-c',
-        name: '分析',
+        name: 'analysis-c',
         access: 'isConsumableDomain',
         routes: [
           {
-            name: '耗占比分析',
+            name: 'ratio',
             path: '/finance/analysis-c/ratio',
             icon: 'PieChartOutlined',
             component: './EmptyPage',
           },
           {
-            name: '成本趋势',
+            name: 'trend',
             path: '/finance/analysis-c/trend',
             icon: 'RiseOutlined',
             component: './EmptyPage',
           },
           {
-            name: 'DRG成本分析',
+            name: 'drg',
             path: '/finance/analysis-c/drg',
             icon: 'FundOutlined',
             component: './EmptyPage',
@@ -585,23 +585,23 @@ export default [
       // 药品端分析
       {
         path: '/finance/analysis-m',
-        name: '分析',
+        name: 'analysis-m',
         access: 'isMedicineDomain',
         routes: [
           {
-            name: '药占比分析',
+            name: 'ratio',
             path: '/finance/analysis-m/ratio',
             icon: 'PieChartOutlined',
             component: './EmptyPage',
           },
           {
-            name: '成本趋势',
+            name: 'trend',
             path: '/finance/analysis-m/trend',
             icon: 'RiseOutlined',
             component: './EmptyPage',
           },
           {
-            name: 'DRG成本分析',
+            name: 'drg',
             path: '/finance/analysis-m/drg',
             icon: 'FundOutlined',
             component: './EmptyPage',
@@ -614,21 +614,21 @@ export default [
   // ==================== 8. 报表分析 ====================
   {
     path: '/analytics',
-    name: '报表分析',
+    name: 'analytics',
     icon: 'LineChartOutlined',
     routes: [
       {
         path: '/analytics/stock',
-        name: '库存报表',
+        name: 'stock',
         routes: [
           {
-            name: '库存总览大屏',
+            name: 'dashboard',
             path: '/analytics/stock/dashboard',
             icon: 'DashboardOutlined',
             component: './EmptyPage',
           },
           {
-            name: '预警报表',
+            name: 'alarm',
             path: '/analytics/stock/alarm',
             icon: 'WarningOutlined',
             component: './EmptyPage',
@@ -637,22 +637,22 @@ export default [
       },
       {
         path: '/analytics/biz',
-        name: '业务报表',
+        name: 'biz',
         routes: [
           {
-            name: '采购统计报表',
+            name: 'procurement',
             path: '/analytics/biz/procurement',
             icon: 'BarChartOutlined',
             component: './EmptyPage',
           },
           {
-            name: '消耗分析报表',
+            name: 'consumption',
             path: '/analytics/biz/consumption',
             icon: 'LineChartOutlined',
             component: './EmptyPage',
           },
           {
-            name: '供应商绩效报表',
+            name: 'supplier',
             path: '/analytics/biz/supplier',
             icon: 'StarOutlined',
             component: './EmptyPage',
@@ -661,16 +661,16 @@ export default [
       },
       {
         path: '/analytics/custom',
-        name: '自定义',
+        name: 'custom',
         routes: [
           {
-            name: '自定义报表',
+            name: 'report',
             path: '/analytics/custom/report',
             icon: 'SlidersOutlined',
             component: './EmptyPage',
           },
           {
-            name: '报表导出中心',
+            name: 'export',
             path: '/analytics/custom/export',
             icon: 'DownloadOutlined',
             component: './EmptyPage',
@@ -683,27 +683,27 @@ export default [
   // ==================== 9. 供应商门户 (SCP) ====================
   {
     path: '/scp',
-    name: '供应商门户 (SCP)',
+    name: 'scp',
     icon: 'GlobalOutlined',
     routes: [
       {
         path: '/scp/workdesk',
-        name: '协同工作台',
+        name: 'workdesk',
         routes: [
           {
-            name: '供应商工作台',
+            name: 'home',
             path: '/scp/workdesk/home',
             icon: 'HomeOutlined',
             component: './EmptyPage',
           },
           {
-            name: '订单协同',
+            name: 'orders',
             path: '/scp/workdesk/orders',
             icon: 'InteractionOutlined',
             component: './EmptyPage',
           },
           {
-            name: '发货管理',
+            name: 'delivery',
             path: '/scp/workdesk/delivery',
             icon: 'CarOutlined',
             component: './EmptyPage',
@@ -712,22 +712,22 @@ export default [
       },
       {
         path: '/scp/finance',
-        name: '资质与财务',
+        name: 'finance',
         routes: [
           {
-            name: '证照维护',
+            name: 'certs',
             path: '/scp/finance/certs',
             icon: 'SafetyCertificateOutlined',
             component: './EmptyPage',
           },
           {
-            name: '在线对账',
+            name: 'reconcile',
             path: '/scp/finance/reconcile',
             icon: 'TransactionOutlined',
             component: './EmptyPage',
           },
           {
-            name: '发票上传',
+            name: 'invoice',
             path: '/scp/finance/invoice',
             icon: 'UploadOutlined',
             component: './EmptyPage',
@@ -736,16 +736,16 @@ export default [
       },
       {
         path: '/scp/data',
-        name: '数据',
+        name: 'data',
         routes: [
           {
-            name: '消耗数据查看',
+            name: 'consumption',
             path: '/scp/data/consumption',
             icon: 'DatabaseOutlined',
             component: './EmptyPage',
           },
           {
-            name: '绩效评分',
+            name: 'kpi',
             path: '/scp/data/kpi',
             icon: 'StarOutlined',
             component: './EmptyPage',
@@ -758,29 +758,29 @@ export default [
   // ==================== 10. 智能设备 ====================
   {
     path: '/device',
-    name: '智能设备',
+    name: 'device',
     icon: 'ApiOutlined',
     routes: [
       // 耗材端专有
       {
         path: '/device/mgr-c',
-        name: '设备管理',
+        name: 'mgr-c',
         access: 'isConsumableDomain',
         routes: [
           {
-            name: '智能柜管理',
+            name: 'cabinet',
             path: '/device/mgr-c/cabinet',
             icon: 'AppstoreOutlined',
             component: './EmptyPage',
           },
           {
-            name: 'RFID设备',
+            name: 'rfid',
             path: '/device/mgr-c/rfid',
             icon: 'WifiOutlined',
             component: './EmptyPage',
           },
           {
-            name: '扫码枪管理',
+            name: 'scanner',
             path: '/device/mgr-c/scanner',
             icon: 'ScanOutlined',
             component: './EmptyPage',
@@ -790,23 +790,23 @@ export default [
       // 药品端专有
       {
         path: '/device/mgr-m',
-        name: '设备管理',
+        name: 'mgr-m',
         access: 'isMedicineDomain',
         routes: [
           {
-            name: '智能柜管理',
+            name: 'cabinet',
             path: '/device/mgr-m/cabinet',
             icon: 'AppstoreOutlined',
             component: './EmptyPage',
           },
           {
-            name: '智能药柜毒麻柜',
+            name: 'cabinet',
             path: '/device/mgr-m/drug-cabinet',
             icon: 'WifiOutlined',
             component: './EmptyPage',
           },
           {
-            name: '扫码枪管理',
+            name: 'scanner',
             path: '/device/mgr-m/scanner',
             icon: 'ScanOutlined',
             component: './EmptyPage',
@@ -815,16 +815,16 @@ export default [
       },
       {
         path: '/device/sync',
-        name: '数据同步',
+        name: 'sync',
         routes: [
           {
-            name: '设备数据同步',
+            name: 'data',
             path: '/device/sync/data',
             icon: 'SyncOutlined',
             component: './EmptyPage',
           },
           {
-            name: '设备异常告警',
+            name: 'alarm',
             path: '/device/sync/alarm',
             icon: 'AlertOutlined',
             component: './EmptyPage',
@@ -837,27 +837,27 @@ export default [
   // ==================== 11. 系统管理 ====================
   {
     path: '/system',
-    name: '系统管理',
+    name: 'system',
     icon: 'SettingOutlined',
     routes: [
       {
         path: '/system/org',
-        name: '组织与用户',
+        name: 'org',
         routes: [
           {
-            name: '机构/科室管理',
+            name: 'dept',
             path: '/system/org/dept',
             icon: 'ApartmentOutlined',
             component: './EmptyPage',
           },
           {
-            name: '员工管理',
+            name: 'employee',
             path: '/system/org/staff',
             icon: 'UserOutlined',
             component: './EmptyPage',
           },
           {
-            name: '用户组管理',
+            name: 'group',
             path: '/system/org/group',
             icon: 'TeamOutlined',
             component: './EmptyPage',
@@ -866,22 +866,22 @@ export default [
       },
       {
         path: '/system/auth',
-        name: '权限',
+        name: 'permission',
         routes: [
           {
-            name: '角色管理',
+            name: 'role',
             path: '/system/auth/roles',
             icon: 'KeyOutlined',
             component: './EmptyPage',
           },
           {
-            name: '权限配置',
+            name: 'config',
             path: '/system/auth/permissions',
             icon: 'SafetyOutlined',
             component: './EmptyPage',
           },
           {
-            name: '菜单管理',
+            name: 'menu',
             path: '/system/auth/menu',
             icon: 'MenuOutlined',
             component: './EmptyPage',
@@ -890,16 +890,16 @@ export default [
       },
       {
         path: '/system/tenant',
-        name: '租户',
+        name: 'tenant',
         routes: [
           {
-            name: '租户管理',
+            name: 'mgr',
             path: '/system/tenant/mgr',
             icon: 'ClusterOutlined',
             component: './EmptyPage',
           },
           {
-            name: '模块开通管理',
+            name: 'modules',
             path: '/system/tenant/modules',
             icon: 'AppstoreAddOutlined',
             component: './EmptyPage',
@@ -908,22 +908,22 @@ export default [
       },
       {
         path: '/system/base',
-        name: '基础数据',
+        name: 'master',
         routes: [
           {
-            name: '数据字典',
+            name: 'dict',
             path: '/system/base/dicts',
             icon: 'BookOutlined',
             component: './EmptyPage',
           },
           {
-            name: '系统参数',
+            name: 'params',
             path: '/system/base/params',
             icon: 'SlidersOutlined',
             component: './EmptyPage',
           },
           {
-            name: '单号生成规则',
+            name: 'rules',
             path: '/system/base/rules',
             icon: 'BarcodeOutlined',
             component: './EmptyPage',
@@ -932,16 +932,16 @@ export default [
       },
       {
         path: '/system/notify',
-        name: '通知',
+        name: 'notification',
         routes: [
           {
-            name: '消息通知配置',
+            name: 'config',
             path: '/system/notify/config',
             icon: 'NotificationOutlined',
             component: './EmptyPage',
           },
           {
-            name: '邮件/短信模板',
+            name: 'template',
             path: '/system/notify/templates',
             icon: 'MailOutlined',
             component: './EmptyPage',
@@ -954,27 +954,27 @@ export default [
   // ==================== 12. 运维工具 ====================
   {
     path: '/tool',
-    name: '运维工具',
+    name: 'operations',
     icon: 'BuildOutlined',
     routes: [
       {
         path: '/tool/logs',
-        name: '日志监控',
+        name: 'logs',
         routes: [
           {
-            name: '操作日志',
+            name: 'action',
             path: '/tool/logs/operation',
             icon: 'FileTextOutlined',
             component: './EmptyPage',
           },
           {
-            name: '登录日志',
+            name: 'login',
             path: '/tool/logs/login',
             icon: 'LoginOutlined',
             component: './EmptyPage',
           },
           {
-            name: '服务心跳监控',
+            name: 'heartbeat',
             path: '/tool/logs/heartbeat',
             icon: 'HeartOutlined',
             component: './EmptyPage',
@@ -983,10 +983,10 @@ export default [
       },
       {
         path: '/tool/jobs',
-        name: '任务',
+        name: 'job',
         routes: [
           {
-            name: '定时任务管理',
+            name: 'cron',
             path: '/tool/jobs/cron',
             icon: 'ClockCircleOutlined',
             component: './EmptyPage',
@@ -995,28 +995,28 @@ export default [
       },
       {
         path: '/tool/dev',
-        name: '开发工具',
+        name: 'tools',
         routes: [
           {
-            name: '接口文档 (Knife4j)',
+            name: 'knife4j',
             path: '/tool/dev/api-doc',
             icon: 'ApiOutlined',
             component: './EmptyPage',
           },
           {
-            name: '代码生成器',
+            name: 'generator',
             path: '/tool/dev/codegen',
             icon: 'CodeOutlined',
             component: './EmptyPage',
           },
           {
-            name: '数据变更记录',
+            name: 'db-changes',
             path: '/tool/dev/changelog',
             icon: 'HistoryOutlined',
             component: './EmptyPage',
           },
           {
-            name: '附件管理',
+            name: 'attachment',
             path: '/tool/dev/attachments',
             icon: 'PaperClipOutlined',
             component: './EmptyPage',
@@ -1025,16 +1025,16 @@ export default [
       },
       {
         path: '/tool/security',
-        name: '安全',
+        name: 'security',
         routes: [
           {
-            name: '密码策略配置',
+            name: 'password',
             path: '/tool/security/password',
             icon: 'LockOutlined',
             component: './EmptyPage',
           },
           {
-            name: '等保安全审计',
+            name: 'audit',
             path: '/tool/security/audit',
             icon: 'AuditOutlined',
             component: './EmptyPage',
