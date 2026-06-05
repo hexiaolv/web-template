@@ -50,6 +50,14 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({
    */
   const loginOut = async () => {
     await outLogin();
+    // 清除本地存储的登录会话信息，防止直接访问时自动登录
+    localStorage.removeItem('currentUserRole');
+    localStorage.removeItem('currentBranch');
+    localStorage.removeItem('currentDomain');
+    localStorage.removeItem('currentDept');
+    localStorage.removeItem('currentDeptList');
+    localStorage.removeItem('customUserName');
+
     const { search, pathname } = window.location;
     const urlParams = new URL(window.location.href).searchParams;
     const searchParams = new URLSearchParams({

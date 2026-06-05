@@ -1142,6 +1142,11 @@ export const layout: RunTimeLayoutConfig = ({
       const isLogin = props.location?.pathname === loginPath;
       const isTabsDisabled = !initialState?.settings?.tabsLayout;
 
+      if (!initialState?.currentUser && !isLogin) {
+        history.push(loginPath);
+        return null;
+      }
+
       const content =
         isLogin || isTabsDisabled ? (
           children
