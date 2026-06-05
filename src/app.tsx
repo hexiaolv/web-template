@@ -417,6 +417,9 @@ export async function getInitialState(): Promise<{
 }> {
   const fetchUserInfo = async () => {
     try {
+      if (!localStorage.getItem('currentUserRole')) {
+        throw new Error('No active login session');
+      }
       const msg = await queryCurrentUser({
         skipErrorHandler: true,
       });

@@ -339,15 +339,16 @@ const Login: React.FC = () => {
   }, []);
 
   const getSafeRedirectUrl = (redirect: string | null): string => {
-    if (!redirect?.startsWith('/')) return '/';
-    if (redirect.startsWith('//')) return '/';
+    const defaultUrl = '/web-template/';
+    if (!redirect?.startsWith('/')) return defaultUrl;
+    if (redirect.startsWith('//')) return defaultUrl;
 
     try {
       const parsed = new URL(redirect, window.location.origin);
-      if (parsed.origin !== window.location.origin) return '/';
+      if (parsed.origin !== window.location.origin) return defaultUrl;
       return `${parsed.pathname}${parsed.search}${parsed.hash}`;
     } catch {
-      return '/';
+      return defaultUrl;
     }
   };
 
