@@ -1,0 +1,69 @@
+{
+  "data": [
+    {
+      "id": "SH-20250603-001",
+      "orderId": "PO-20250602-001",
+      "supplier": "北京中科医疗器械有限公司",
+      "logisticsCompany": "中国邮政速递物流",
+      "trackingNo": "EMS1234567890CN",
+      "domain": "consumable",
+      "branch": "主院区",
+      "sendTime": "2025-06-03 14:30:00",
+      "estimatedArrival: ": "2025-06-05",
+      "actualArrival": null,
+      "status": "in_transit",
+      "statusName": "运输中",
+      "itemDesc": "一次性无菌注射器、手术衣、手套等8个品种",
+      "sendQty": 5,
+      "contactPhone": "010-88886661",
+      "nodes": [
+        { "time": "2025-06-03 14:30", "location": "北京顺义仓库", "event": "货物已装车出库" },
+        { "time": "2025-06-03 17:20", "location": "北京顺义分拨中心", "event": "已完成揽收，进入运输流程" },
+        { "time": "2025-06-04 06:15", "location": "郑州中转站", "event": "中转站已接收货物，正在转运" }
+      ]
+    },
+    {
+      "id": "SH-20250601-002",
+      "orderId": "PO-20250602-002",
+      "supplier": "浙江振德医疗用品有限公司",
+      "logisticsCompany": "德邦物流",
+      "trackingNo": "DBL9988001234",
+      "domain": "consumable",
+      "branch": "主院区",
+      "sendTime": "2025-06-01 10:00:00",
+      "estimatedArrival": "2025-06-03",
+      "actualArrival": "2025-06-06 09:30",
+      "status": "arrived",
+      "statusName": "已到达",
+      "itemDesc": "医用外科口罩、无菌手套等5个品种",
+      "sendQty": 3,
+      "contactPhone": "0571-88998800",
+      "nodes": [
+        { "time": "2025-06-01 10:00", "location": "绍兴柯桥工厂", "event": "货物出库，交付德邦物流" },
+        { "time": "2025-06-01 16:30", "location": "绍兴德邦中转站", "event": "已接收货物" },
+        { "time": "2025-06-06 09:30", "location": "广州市花都区医院收货站台", "event": "货物已签收入库" }
+      ]
+    },
+    {
+      "id": "SH-20250603-003",
+      "orderId": "PO-20250601-003",
+      "supplier": "国药控股广州有限公司",
+      "logisticsCompany": "自有配送车辆",
+      "trackingNo": "GDGZ-20250603-045",
+      "domain": "medicine",
+      "branch": "主院区",
+      "sendTime": "2025-06-03 07:00:00",
+      "estimatedArrival": "2025-06-04",
+      "actualArrival": "2025-06-04 10:15",
+      "status": "arrived",
+      "statusName": "已到达",
+      "itemDesc": "注射用奥美拉唑、氯化钠注射液等10个品种",
+      "sendQty": 10,
+      "contactPhone": "020-81882299",
+      "nodes": [
+        { "time": "2025-06-03 07:00", "location": "国药广州一号冷链库", "event": "温湿度监控正常，装车发运" },
+        { "time": "2025-06-04 10:15", "location": "主院区西区药房签收", "event": "完成入库签收" }
+      ]
+    }
+  ]
+}

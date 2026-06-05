@@ -1,0 +1,24 @@
+{
+  "data": {
+    "name": "超级管理员(院长)",
+    "avatar": "https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png",
+    "userid": "00000001",
+    "email": "admin@spd-supply.com",
+    "signature": "Antigravity Code",
+    "title": "首席安全官",
+    "group": "管理委员会",
+    "tags": [
+      { "key": "0", "label": "很有想法的" },
+      { "key": "1", "label": "专注设计" }
+    ],
+    "notifyCount": 12,
+    "unreadCount": 11,
+    "country": "China",
+    "access": "admin",
+    "geographic": {
+      "province": { "label": "北京市", "key": "110000" },
+      "city": { "label": "北京市", "key": "110100" }
+    },
+    "address": "朝阳区和平街东口"
+  }
+}

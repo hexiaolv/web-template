@@ -1,0 +1,18 @@
+{
+  "data": [
+    {
+      "id": "000000001",
+      "avatar": "https://gw.alipayobjects.com/zos/roomsportal/ThxoSpSn2ydrUms.png",
+      "title": "您收到了 14 份新物资采购申请订单，请及时审核。",
+      "datetime": "2026-06-05",
+      "type": "notification"
+    },
+    {
+      "id": "000000002",
+      "avatar": "https://gw.alipayobjects.com/zos/roomsportal/OKDIqVIHGPqN7nd.png",
+      "title": "供应商“北京中科医疗器械有限公司”上传了新的合格证照。",
+      "datetime": "2026-06-04",
+      "type": "notification"
+    }
+  ]
+}
