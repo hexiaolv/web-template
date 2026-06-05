@@ -185,4 +185,5 @@ export default {
   'menu.operations.security': 'Security',
   'menu.operations.security.password': 'Password Policy',
   'menu.operations.security.audit': 'Security Audit',
+  'menu.operations.security.level3': 'Level-3 Security Settings',
 };

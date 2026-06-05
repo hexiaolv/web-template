@@ -3,7 +3,9 @@ import {
   CarOutlined,
   CheckCircleOutlined,
   ClockCircleOutlined,
+  DownloadOutlined,
   EyeOutlined,
+  PrinterOutlined,
   WarningOutlined,
 } from '@ant-design/icons';
 import type { ProColumns } from '@ant-design/pro-components';
@@ -14,12 +16,16 @@ import {
   Button,
   Descriptions,
   Drawer,
+  Modal,
   Space,
   Tag,
   Timeline,
   Typography,
 } from 'antd';
+import { exportToPdf, openPrintWindow, PrintPreview } from 'print-designer';
 import React, { useState } from 'react';
+import type { PrintTemplate } from '../../../analytics/reports/mockTemplates';
+import { mockTemplates } from '../../../analytics/reports/mockTemplates';
 
 const { Text } = Typography;
 
@@ -49,6 +55,11 @@ const statusConfig: Record<string, { color: string; icon: React.ReactNode }> = {
   exception: { color: 'red', icon: <WarningOutlined /> },
 };
 
+// 获取发货单的 Mock 模版配置
+const deliveryTemplate = mockTemplates.find(
+  (t: PrintTemplate) => t.code === 'c_delivery_order',
+) as PrintTemplate;
+
 const ProcurementTrack: React.FC = () => {
   const { message } = App.useApp();
   const { initialState } = useModel('@@initialState');
@@ -56,6 +67,86 @@ const ProcurementTrack: React.FC = () => {
 
   const [detailVisible, setDetailVisible] = useState(false);
   const [currentTrack, setCurrentTrack] = useState<TrackItem | null>(null);
+
+  // 打印相关状态
+  const [printModalVisible, setPrintModalVisible] = useState(false);
+  const [printData, setPrintData] = useState<any>(null);
+  const [templateDesign, setTemplateDesign] = useState<{
+    bands?: any[];
+    pageSettings?: any;
+  } | null>(null);
+
+  // 触发发货单打印预览
+  const handlePrintClick = (record: TrackItem) => {
+    // 从统一的 LocalStorage 键名加载设计模板
+    const saved = localStorage.getItem(
+      `print_template_by_code_${deliveryTemplate.code}`,
+    );
+    let design: any = {};
+    if (saved) {
+      try {
+        design = JSON.parse(saved);
+      } catch (e) {
+        console.error('解析发货单模板失败，将使用默认样式:', e);
+      }
+    }
+
+    // 映射 products 明细列表：将模板自带的超长 products 与该订单基本数据合并
+    // 这样可以让订单追踪列表中每行数据在打印时都有高拟真、多达24行的明细项目，形成完美的跨页效果！
+    const detailProducts = [...deliveryTemplate.mockData.products];
+    const fullPrintData = {
+      ...record,
+      products: detailProducts,
+    };
+
+    setTemplateDesign(design);
+    setPrintData(fullPrintData);
+    setPrintModalVisible(true);
+  };
+
+  // 调起系统打印
+  const triggerBrowserPrint = () => {
+    if (!printData) return;
+    openPrintWindow({
+      design: {
+        bands: templateDesign?.bands || deliveryTemplate.fallbackBands,
+        pageSettings:
+          templateDesign?.pageSettings || deliveryTemplate.fallbackPageSettings,
+      },
+      data: printData,
+      dataFields: deliveryTemplate.dataFields,
+    });
+  };
+
+  // 导出 PDF 并下载
+  const triggerPdfExport = async () => {
+    if (!printData) return;
+    message.open({
+      type: 'loading',
+      content: '正在生成发货单 PDF 报表文件...',
+      duration: 0,
+    });
+    try {
+      await exportToPdf({
+        design: {
+          bands: templateDesign?.bands || deliveryTemplate.fallbackBands,
+          pageSettings:
+            templateDesign?.pageSettings ||
+            deliveryTemplate.fallbackPageSettings,
+        },
+        data: printData,
+        dataFields: deliveryTemplate.dataFields,
+        fileName: `发货单_${printData.id}`,
+        download: true,
+      });
+      message.destroy();
+      message.success('PDF 报表导出并下载成功！');
+    } catch (error) {
+      message.destroy();
+      message.error('导出 PDF 报表失败，请检查模板配置！');
+      console.error(error);
+    }
+  };
 
   const { run: urge } = useRequest(
     (id: string) => ({
@@ -152,7 +243,7 @@ const ProcurementTrack: React.FC = () => {
     {
       title: '操作',
       valueType: 'option',
-      width: 130,
+      width: 200,
       render: (_, record) =>
         [
           <a
@@ -163,6 +254,13 @@ const ProcurementTrack: React.FC = () => {
             }}
           >
             <EyeOutlined /> 物流轨迹
+          </a>,
+          <a
+            key="print"
+            style={{ color: '#52c41a' }}
+            onClick={() => handlePrintClick(record)}
+          >
+            <PrinterOutlined /> 打印单据
           </a>,
           record.status !== 'arrived' && (
             <a
@@ -197,7 +295,7 @@ const ProcurementTrack: React.FC = () => {
         }}
         search={{ labelWidth: 'auto' }}
         pagination={{ defaultPageSize: 10 }}
-        scroll={{ x: 1400 }}
+        scroll={{ x: 1450 }}
       />
 
       {/* 物流轨迹抽屉 */}
@@ -297,6 +395,67 @@ const ProcurementTrack: React.FC = () => {
           </>
         )}
       </Drawer>
+
+      {/* 单据打印预览 Modal */}
+      <Modal
+        title={
+          <Space>
+            <PrinterOutlined style={{ color: '#1677ff' }} />
+            <span>发货单打印预览</span>
+            <Tag color="blue">自定义报表模版已加载</Tag>
+          </Space>
+        }
+        open={printModalVisible}
+        onCancel={() => setPrintModalVisible(false)}
+        width={850}
+        destroyOnClose
+        footer={[
+          <Button key="close" onClick={() => setPrintModalVisible(false)}>
+            关闭
+          </Button>,
+          <Button
+            key="pdf"
+            icon={<DownloadOutlined />}
+            style={{ borderColor: '#ff4d4f', color: '#ff4d4f' }}
+            onClick={triggerPdfExport}
+          >
+            导出 PDF
+          </Button>,
+          <Button
+            key="print"
+            type="primary"
+            icon={<PrinterOutlined />}
+            onClick={triggerBrowserPrint}
+          >
+            打印单据
+          </Button>,
+        ]}
+      >
+        <div
+          style={{
+            padding: '24px 0',
+            display: 'flex',
+            justifyContent: 'center',
+            backgroundColor: '#f1f5f9',
+            borderRadius: '8px',
+            maxHeight: '60vh',
+            overflowY: 'auto',
+          }}
+        >
+          {printData && (
+            <PrintPreview
+              bands={templateDesign?.bands || deliveryTemplate.fallbackBands}
+              data={printData}
+              dataFields={deliveryTemplate.dataFields}
+              pageSettings={
+                templateDesign?.pageSettings ||
+                deliveryTemplate.fallbackPageSettings
+              }
+              onClose={() => setPrintModalVisible(false)}
+            />
+          )}
+        </div>
+      </Modal>
     </PageContainer>
   );
 };

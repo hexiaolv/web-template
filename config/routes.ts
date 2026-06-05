@@ -1039,6 +1039,12 @@ export default [
             icon: 'AuditOutlined',
             component: './EmptyPage',
           },
+          {
+            name: 'level3',
+            path: '/tool/security/level3',
+            icon: 'SafetyCertificateOutlined',
+            component: './tool/security/level3',
+          },
         ],
       },
     ],

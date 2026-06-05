@@ -77,18 +77,47 @@ export default function useMultiTab(): MultiTabModel {
   /**
    * 辅助：计算 i18n key，不做实际翻译（避免 getIntl 时序问题）
    */
-  const resolveTitle = useCallback((path: string, name?: string) => {
-    // 优先用路径拼完整 key：menu.procurement.orders.plan
-    const pathKey = `menu${path.replace(/\//g, '.')}`;
-    // 陆级：单层 name key
-    const nameKey = name ? `menu.${name}` : undefined;
-    return {
-      // title 仅作 fallback，真正显示标题由 TabBar 的 useIntl 处理
-      title: name || path.split('/').pop() || '首页',
-      titleKey: pathKey,
-      titleKeyFallback: nameKey,
-    };
-  }, []);
+  const resolveTitle = useCallback(
+    (path: string, name?: string) => {
+      const routes = Object.values(allRoutes);
+      const matchedRoute = routes.find((r: any) => r.path === path);
+      let fullKey: string | undefined;
+
+      if (matchedRoute) {
+        const names: string[] = [];
+        let current: any = matchedRoute;
+        while (current) {
+          if (current.name) {
+            names.unshift(current.name);
+          }
+          const parentId = current.parentId;
+          if (
+            !parentId ||
+            parentId === 'ant-design-pro-layout' ||
+            parentId === '@@/global-layout' ||
+            parentId === 'root'
+          ) {
+            break;
+          }
+          current = allRoutes[parentId];
+        }
+        if (names.length > 0) {
+          fullKey = `menu.${names.join('.')}`;
+        }
+      }
+
+      // 优先用路由关联追溯拼出的完整 key，其次退回原有纯 path 替换，最次使用单层 name key
+      const pathKey = fullKey || `menu${path.replace(/\//g, '.')}`;
+      const nameKey = name ? `menu.${name}` : undefined;
+      return {
+        // title 仅作 fallback，真正显示标题由 TabBar 的 useIntl 处理
+        title: name || path.split('/').pop() || '首页',
+        titleKey: pathKey,
+        titleKeyFallback: nameKey,
+      };
+    },
+    [allRoutes],
+  );
 
   // 1. 预计算首页信息
   const homeInfo = useMemo(

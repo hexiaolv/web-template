@@ -185,4 +185,5 @@ export default {
   'menu.operations.security': '安全',
   'menu.operations.security.password': '密码策略配置',
   'menu.operations.security.audit': '等保安全审计',
+  'menu.operations.security.level3': '三级等保设置',
 };
