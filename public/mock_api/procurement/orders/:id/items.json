@@ -1,0 +1,54 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "materialCode": "C-20241-001",
+      "materialName": "一次性使用无菌注射器",
+      "spec": "10ml，带针，鲁尔滑动接头",
+      "unit": "支",
+      "brand": "江苏康辉",
+      "orderedQty": 30000,
+      "receivedQty": 0,
+      "unitPrice": 0.85,
+      "totalAmount": 25500,
+      "requireDate": "2025-06-08",
+      "batchNo": null,
+      "expireDate": null,
+      "remark": null
+    },
+    {
+      "id": "2",
+      "materialCode": "C-20163-002",
+      "materialName": "一次性使用无菌手术衣",
+      "spec": "L号，SMS无纺布，防液体渗透",
+      "unit": "件",
+      "brand": "威格医疗",
+      "orderedQty": 800,
+      "receivedQty": 0,
+      "unitPrice": 38,
+      "totalAmount": 30400,
+      "requireDate": "2025-06-08",
+      "batchNo": null,
+      "expireDate": null,
+      "remark": null
+    },
+    {
+      "id": "3",
+      "materialCode": "C-51032-005",
+      "materialName": "医用检查手套（乳胶）",
+      "spec": "M号，无粉，一次性使用",
+      "unit": "双",
+      "brand": "麦迪卡尔",
+      "orderedQty": 10000,
+      "receivedQty": 0,
+      "unitPrice": 0.72,
+      "totalAmount": 7200,
+      "requireDate": "2025-06-08",
+      "batchNo": null,
+      "expireDate": null,
+      "remark": null
+    }
+  ],
+  "total": 3,
+  "success": true
+}

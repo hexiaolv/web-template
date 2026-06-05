@@ -1,0 +1,7 @@
+{
+  "success": true,
+  "message": "已成功转化为采购订单",
+  "data": {
+    "orderId": "PO-20250604-253"
+  }
+}

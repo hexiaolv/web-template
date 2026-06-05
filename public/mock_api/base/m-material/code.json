@@ -1,0 +1,90 @@
+{
+  "data": [
+    {
+      "id": "TC-001",
+      "traceCode": "83012345678901234567",
+      "drugCode": "YP20250001",
+      "drugName": "注射用头孢曲松钠",
+      "batchNo": "20250301",
+      "productionDate": "2025-03-01",
+      "expiryDate": "2027-03-01",
+      "manufacturer": "哈药集团制药总厂",
+      "spec": "1g/瓶",
+      "status": "activated",
+      "statusName": "已激活",
+      "createTime": "2025-03-05 10:00:00"
+    },
+    {
+      "id": "TC-002",
+      "traceCode": "83012345678901234574",
+      "drugCode": "YP20250003",
+      "drugName": "舒芬太尼注射液",
+      "batchNo": "20250201",
+      "productionDate": "2025-02-01",
+      "expiryDate": "2028-02-01",
+      "manufacturer": "宜昌人福药业有限责任公司",
+      "spec": "1ml:50μg",
+      "status": "activated",
+      "statusName": "已激活",
+      "createTime": "2025-02-10 09:00:00"
+    },
+    {
+      "id": "TC-003",
+      "traceCode": "83012345678901234581",
+      "drugCode": "YP20250004",
+      "drugName": "阿莫西林胶囊",
+      "batchNo": "20250401",
+      "productionDate": "2025-04-01",
+      "expiryDate": "2028-04-01",
+      "manufacturer": "广州白云山制药股份有限公司",
+      "spec": "0.5g×24粒",
+      "status": "used",
+      "statusName": "已使用",
+      "createTime": "2025-04-10 14:00:00"
+    },
+    {
+      "id": "TC-004",
+      "traceCode": "83012345678901234598",
+      "drugCode": "YP20250005",
+      "drugName": "奥美拉唑肠溶胶囊",
+      "batchNo": "20250101",
+      "productionDate": "2025-01-01",
+      "expiryDate": "2028-01-01",
+      "manufacturer": "阿斯利康制药有限公司",
+      "spec": "20mg×14粒",
+      "status": "activated",
+      "statusName": "已激活",
+      "createTime": "2025-01-15 10:00:00"
+    },
+    {
+      "id": "TC-005",
+      "traceCode": "83012345678901234604",
+      "drugCode": "YP20250007",
+      "drugName": "胰岛素注射液",
+      "batchNo": "20241201",
+      "productionDate": "2024-12-01",
+      "expiryDate": "2026-12-01",
+      "manufacturer": "诺和诺德（中国）制药有限公司",
+      "spec": "3ml:300IU",
+      "status": "cancelled",
+      "statusName": "已注销",
+      "createTime": "2024-12-15 09:00:00"
+    },
+    {
+      "id": "TC-006",
+      "traceCode": "83012345678901234611",
+      "drugCode": "YP20250010",
+      "drugName": "碘海醇注射液",
+      "batchNo": "20250501",
+      "productionDate": "2025-05-01",
+      "expiryDate": "2028-05-01",
+      "manufacturer": "通用电气药业（上海）有限公司",
+      "spec": "100ml:30g(I)",
+      "status": "activated",
+      "statusName": "已激活",
+      "createTime": "2025-05-10 11:00:00"
+    }
+  ],
+  "total": 6,
+  "success": true
+}

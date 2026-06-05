@@ -667,7 +667,7 @@ export default [
             name: 'report',
             path: '/analytics/custom/report',
             icon: 'SlidersOutlined',
-            component: './EmptyPage',
+            component: './analytics/reports',
           },
           {
             name: 'export',

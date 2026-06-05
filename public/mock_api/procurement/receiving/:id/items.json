@@ -1,0 +1,57 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "materialCode": "M-10042-001",
+      "materialName": "注射用奥美拉唑钠（洛赛克）",
+      "spec": "40mg/支",
+      "unit": "支",
+      "brand": "阿斯利康",
+      "batchNo": "20250320",
+      "expireDate": "2027-03-01",
+      "manufacturer": "阿斯利康制药有限公司",
+      "orderedQty": 500,
+      "arrivedQty": 500,
+      "qualifiedQty": 500,
+      "udiCode": "6901234567890",
+      "result": "qualified",
+      "remark": null
+    },
+    {
+      "id": "2",
+      "materialCode": "M-10088-002",
+      "materialName": "注射用头孢曲松钠",
+      "spec": "1g/瓶",
+      "unit": "瓶",
+      "brand": "罗氏",
+      "batchNo": "20250210",
+      "expireDate": "2026-02-01",
+      "manufacturer": "广州南新制药有限公司",
+      "orderedQty": 2000,
+      "arrivedQty": 2000,
+      "qualifiedQty": 2000,
+      "udiCode": "6909876543210",
+      "result": "qualified",
+      "remark": null
+    },
+    {
+      "id": "3",
+      "materialCode": "M-20015-003",
+      "materialName": "0.9%氯化钠注射液",
+      "spec": "500ml/袋",
+      "unit": "袋",
+      "brand": "科伦",
+      "batchNo": "20250401",
+      "expireDate": "2026-10-01",
+      "manufacturer": "四川科伦药业股份有限公司",
+      "orderedQty": 3000,
+      "arrivedQty": 3000,
+      "qualifiedQty": 3000,
+      "udiCode": "6912233445566",
+      "result": "qualified",
+      "remark": null
+    }
+  ],
+  "total": 3,
+  "success": true
+}

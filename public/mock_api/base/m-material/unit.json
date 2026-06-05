@@ -1,0 +1,126 @@
+{
+  "data": [
+    {
+      "id": "MU-001",
+      "code": "U101",
+      "name": "片",
+      "type": "base",
+      "typeName": "基本单位",
+      "conversionFactor": 1,
+      "baseUnitName": "片",
+      "status": "active",
+      "statusName": "启用",
+      "createTime": "2025-01-01 00:00:00"
+    },
+    {
+      "id": "MU-002",
+      "code": "U102",
+      "name": "支",
+      "type": "base",
+      "typeName": "基本单位",
+      "conversionFactor": 1,
+      "baseUnitName": "支",
+      "status": "active",
+      "statusName": "启用",
+      "createTime": "2025-01-01 00:00:00"
+    },
+    {
+      "id": "MU-003",
+      "code": "U103",
+      "name": "瓶",
+      "type": "base",
+      "typeName": "基本单位",
+      "conversionFactor": 1,
+      "baseUnitName": "瓶",
+      "status": "active",
+      "statusName": "启用",
+      "createTime": "2025-01-01 00:00:00"
+    },
+    {
+      "id": "MU-004",
+      "code": "U104",
+      "name": "盒",
+      "type": "base",
+      "typeName": "基本单位",
+      "conversionFactor": 1,
+      "baseUnitName": "盒",
+      "status": "active",
+      "statusName": "启用",
+      "createTime": "2025-01-01 00:00:00"
+    },
+    {
+      "id": "MU-005",
+      "code": "U105",
+      "name": "袋",
+      "type": "base",
+      "typeName": "基本单位",
+      "conversionFactor": 1,
+      "baseUnitName": "袋",
+      "status": "active",
+      "statusName": "启用",
+      "createTime": "2025-01-01 00:00:00"
+    },
+    {
+      "id": "MU-006",
+      "code": "U106",
+      "name": "粒",
+      "type": "base",
+      "typeName": "基本单位",
+      "conversionFactor": 1,
+      "baseUnitName": "粒",
+      "status": "active",
+      "statusName": "启用",
+      "createTime": "2025-01-01 00:00:00"
+    },
+    {
+      "id": "MU-007",
+      "code": "U107",
+      "name": "ml",
+      "type": "base",
+      "typeName": "基本单位",
+      "conversionFactor": 1,
+      "baseUnitName": "ml",
+      "status": "active",
+      "statusName": "启用",
+      "createTime": "2025-01-01 00:00:00"
+    },
+    {
+      "id": "MU-008",
+      "code": "U108",
+      "name": "g",
+      "type": "base",
+      "typeName": "基本单位",
+      "conversionFactor": 1,
+      "baseUnitName": "g",
+      "status": "active",
+      "statusName": "启用",
+      "createTime": "2025-01-01 00:00:00"
+    },
+    {
+      "id": "MU-009",
+      "code": "U109",
+      "name": "板",
+      "type": "convert",
+      "typeName": "换算单位",
+      "conversionFactor": 12,
+      "baseUnitName": "片",
+      "status": "active",
+      "statusName": "启用",
+      "createTime": "2025-01-01 00:00:00"
+    },
+    {
+      "id": "MU-010",
+      "code": "U110",
+      "name": "箱",
+      "type": "convert",
+      "typeName": "换算单位",
+      "conversionFactor": 100,
+      "baseUnitName": "盒",
+      "status": "disabled",
+      "statusName": "停用",
+      "createTime": "2025-01-01 00:00:00"
+    }
+  ],
+  "total": 10,
+  "success": true
+}
