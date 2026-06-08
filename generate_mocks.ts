@@ -15,7 +15,12 @@ Module.prototype.require = function (id: string) {
 
 const mockDir = path.join(__dirname, 'public/mock_api');
 
-function findMockFiles(dir: string, fileList: string[] = []): string[] {
+function findMockFiles(
+  dir: string,
+  isRootMock: boolean = false,
+  fileList: string[] = [],
+): string[] {
+  if (!fs.existsSync(dir)) return fileList;
   const files = fs.readdirSync(dir);
   for (const file of files) {
     const filePath = path.join(dir, file);
@@ -26,17 +31,31 @@ function findMockFiles(dir: string, fileList: string[] = []): string[] {
         file !== '.umi' &&
         file !== '.umi-production'
       ) {
-        findMockFiles(filePath, fileList);
+        findMockFiles(filePath, isRootMock, fileList);
       }
-    } else if (file.endsWith('_mock.ts') || file.endsWith('_mock.js')) {
-      fileList.push(filePath);
+    } else {
+      if (isRootMock) {
+        if (
+          (file.endsWith('.ts') || file.endsWith('.js')) &&
+          file !== 'utils.ts'
+        ) {
+          fileList.push(filePath);
+        }
+      } else {
+        if (file.endsWith('_mock.ts') || file.endsWith('_mock.js')) {
+          fileList.push(filePath);
+        }
+      }
     }
   }
   return fileList;
 }
 
 async function main() {
-  const files = findMockFiles(path.join(__dirname, 'src'));
+  const files = [
+    ...findMockFiles(path.join(__dirname, 'src'), false),
+    ...findMockFiles(path.join(__dirname, 'mock'), true),
+  ];
   console.log(`Found ${files.length} mock files.`);
 
   for (const file of files) {
@@ -55,6 +74,9 @@ async function main() {
           if (!apiPath.startsWith('/api/')) continue;
 
           const relativePath = apiPath.substring(5); // remove '/api/'
+          if (relativePath === 'currentUser' || relativePath === 'notices') {
+            continue;
+          }
           const targetJsonPath = path.join(mockDir, `${relativePath}.json`);
 
           // 如果已经有 GET 请求生成的 JSON，不要用 POST 等其他请求的简单 json (比如 {success:true}) 覆盖它
@@ -71,6 +93,9 @@ async function main() {
               body: {},
             };
             const res = {
+              status: (code: number) => {
+                return res;
+              },
               json: (data: any) => {
                 responseData = data;
               },

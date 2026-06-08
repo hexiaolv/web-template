@@ -1,0 +1,41 @@
+{
+  "success": true,
+  "data": {
+    "totalSpend": "¥268.4万",
+    "turnDays": 10.8,
+    "SatisfactionRate": 99.1,
+    "trendData": [
+      {
+        "name": "周一",
+        "value": 240
+      },
+      {
+        "name": "周二",
+        "value": 280
+      },
+      {
+        "name": "周三",
+        "value": 310
+      },
+      {
+        "name": "周四",
+        "value": 290
+      },
+      {
+        "name": "周五",
+        "value": 350
+      },
+      {
+        "name": "周六",
+        "value": 180
+      },
+      {
+        "name": "周日",
+        "value": 150
+      }
+    ],
+    "branch": "主院区",
+    "domain": "consumable",
+    "dept": "全院"
+  }
+}

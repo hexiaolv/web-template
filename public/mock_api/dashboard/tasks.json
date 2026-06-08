@@ -1,0 +1,41 @@
+{
+  "success": true,
+  "data": [
+    {
+      "id": "TSK-2026-001",
+      "type": "审批",
+      "title": "科室请领单 REQ-0603-018 待审核",
+      "desc": "骨科手术室申请：钛合金锁定骨板4套，接骨螺钉40枚，定数耗材包10包。",
+      "branch": "主院区",
+      "domain": "consumable",
+      "dept": "骨科手术室",
+      "status": "pending",
+      "creator": "张美玲 (病区护士)",
+      "time": "2026-06-03 14:20"
+    },
+    {
+      "id": "TSK-2026-002",
+      "type": "确认",
+      "title": "科室定数包配送任务 DEL-0603-041 待签收",
+      "desc": "主库房已送达：ICU重症监护科一次性使用呼吸机管路15套，无菌输液贴3盒。",
+      "branch": "主院区",
+      "domain": "consumable",
+      "dept": "ICU重症监护科",
+      "status": "pending",
+      "creator": "系统自动生成",
+      "time": "2026-06-03 15:10"
+    },
+    {
+      "id": "TSK-2026-005",
+      "type": "审批",
+      "title": "近效期低周转耗材报损单 LD-0527-003 待审批",
+      "desc": "骨科仓库发起报损：一次性负压引流袋一批，共 50 个（已过期）。",
+      "branch": "主院区",
+      "domain": "consumable",
+      "dept": "骨科手术室",
+      "status": "pending",
+      "creator": "李建国 (仓库管理员)",
+      "time": "2026-06-03 11:15"
+    }
+  ]
+}

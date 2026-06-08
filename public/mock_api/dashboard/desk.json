@@ -1,0 +1,30 @@
+{
+  "success": true,
+  "data": {
+    "metrics": {
+      "title": "全院医用物资统筹看板",
+      "items": [
+        {
+          "label": "在途配送单数",
+          "value": "12 笔"
+        },
+        {
+          "label": "全院库存总值",
+          "value": "¥84.2万"
+        },
+        {
+          "label": "已核账结算单",
+          "value": "¥120.4万"
+        },
+        {
+          "label": "待处理结算异议",
+          "value": "1 笔"
+        }
+      ]
+    },
+    "branch": "主院区",
+    "domain": "consumable",
+    "dept": "全院",
+    "role": "admin"
+  }
+}

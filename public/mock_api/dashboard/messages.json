@@ -1,0 +1,35 @@
+{
+  "success": true,
+  "data": [
+    {
+      "id": "MSG-001",
+      "category": "system",
+      "title": "关于SPD平台2.0版本上线及数据库维护的通知",
+      "content": "系统将于今晚 24:00 至次日 02:00 进行数据库停机迁移维护，届时扫描枪与二级库终端将暂停数据同步，请做好离线消耗准备。",
+      "branch": "all",
+      "domain": "all",
+      "dept": "all",
+      "time": "1小时前"
+    },
+    {
+      "id": "MSG-002",
+      "category": "biz",
+      "title": "主院区骨科手术室物资配送已送达",
+      "content": "您提交的“主院区 - 骨科手术室”消耗请领单配货已完毕，配送包已由物流员送达科室二级库房，请及时核实并签收。",
+      "branch": "主院区",
+      "domain": "consumable",
+      "dept": "骨科手术室",
+      "time": "10分钟前"
+    },
+    {
+      "id": "MSG-005",
+      "category": "system",
+      "title": "关于新增高值耗材入库规范培训的通知",
+      "content": "为贯彻执行集团 UDI 追溯规范，下周三下午将在多功能厅开展高值耗材入库扫码实操技能培训，请相关人员准时参会。",
+      "branch": "all",
+      "domain": "consumable",
+      "dept": "all",
+      "time": "2小时前"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "success": true,
+  "data": [
+    {
+      "id": "ALM-001",
+      "type": "level-1",
+      "category": "stock",
+      "title": "低库存预警：一次性无菌手术衣(大号)",
+      "desc": "骨科手术室：当前库存 12 套，已低于安全储备水位 50 套。",
+      "branch": "主院区",
+      "domain": "consumable",
+      "dept": "骨科手术室",
+      "time": "5分钟前"
+    },
+    {
+      "id": "ALM-002",
+      "type": "level-2",
+      "category": "cert",
+      "title": "供应商资质临期：北京医疗器械有限公司经营许可证",
+      "desc": "国药集团集团共享主数据：该供应商经营许可证将于 7 天后过期。",
+      "branch": "主院区",
+      "domain": "consumable",
+      "dept": "全院",
+      "time": "1小时前"
+    }
+  ]
+}
