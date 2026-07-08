@@ -23,6 +23,7 @@ import { AvatarDropdown } from '@/components/RightContent/AvatarDropdown';
 import { currentUser as queryCurrentUser } from '@/services/ant-design-pro/api';
 import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
+import AiAssistant from '@/components/AiAssistant';
 
 const isDev = process.env.NODE_ENV === 'development';
 const isDevOrTest = isDev || process.env.CI;
@@ -1157,6 +1158,7 @@ export const layout: RunTimeLayoutConfig = ({
       return (
         <>
           {content}
+          <AiAssistant />
           {isDevOrTest && (
             <SettingDrawer
               disableUrlParams
