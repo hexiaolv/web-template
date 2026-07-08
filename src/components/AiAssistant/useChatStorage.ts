@@ -63,9 +63,12 @@ export function useChatStorage() {
     }
   }, []);
 
-  const saveSessions = (newSessions: ChatSession[]) => {
-    setSessions(newSessions);
-    localStorage.setItem(STORAGE_KEY_SESSIONS, JSON.stringify(newSessions));
+  const updateSessions = (updater: (prev: ChatSession[]) => ChatSession[]) => {
+    setSessions((prev) => {
+      const next = updater(prev);
+      localStorage.setItem(STORAGE_KEY_SESSIONS, JSON.stringify(next));
+      return next;
+    });
   };
 
   const savePrompts = (newPrompts: SavedPrompt[]) => {
@@ -81,27 +84,42 @@ export function useChatStorage() {
       updatedAt: Date.now(),
       pinned: false,
     };
-    saveSessions([newSession, ...sessions]);
+    updateSessions((prev) => [newSession, ...prev]);
     return newSession.id;
   };
 
   const updateSessionTitle = (id: string, title: string) => {
-    saveSessions(
-      sessions.map((s) => (s.id === id ? { ...s, title, updatedAt: Date.now() } : s))
+    updateSessions((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, title, updatedAt: Date.now() } : s))
     );
   };
 
   const togglePinSession = (id: string) => {
-    saveSessions(
-      sessions.map((s) => (s.id === id ? { ...s, pinned: !s.pinned } : s))
+    updateSessions((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, pinned: !s.pinned } : s))
     );
   };
 
   const deleteSession = (id: string) => {
-    const remain = sessions.filter((s) => s.id !== id);
-    saveSessions(remain);
+    let nextId = '';
+    updateSessions((prev) => {
+      const remain = prev.filter((s) => s.id !== id);
+      if (remain.length > 0) {
+        nextId = remain[0].id;
+        return remain;
+      } else {
+        const newSession: ChatSession = {
+          id: `session-${Date.now()}`,
+          title: '新会话',
+          updatedAt: Date.now(),
+          pinned: false,
+        };
+        nextId = newSession.id;
+        return [newSession];
+      }
+    });
     localStorage.removeItem(STORAGE_KEY_MESSAGES_PREFIX + id);
-    return remain.length > 0 ? remain[0].id : addSession();
+    return nextId;
   };
 
   // ----- 消息操作 -----
@@ -117,8 +135,8 @@ export function useChatStorage() {
   const saveMessages = (sessionId: string, newMessages: ChatMessage[]) => {
     localStorage.setItem(STORAGE_KEY_MESSAGES_PREFIX + sessionId, JSON.stringify(newMessages));
     // 更新会话的修改时间
-    saveSessions(
-      sessions.map((s) => (s.id === sessionId ? { ...s, updatedAt: Date.now() } : s))
+    updateSessions((prev) =>
+      prev.map((s) => (s.id === sessionId ? { ...s, updatedAt: Date.now() } : s))
     );
   };
 

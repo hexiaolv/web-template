@@ -46,7 +46,8 @@ export interface GuideChatResponse {
 }
 
 export async function queryGuideChat(data: GuideChatRequest) {
-  // 使用相对路径，借助 config/proxy.ts 代理到真实服务器
+  // 由于跨域限制 (CORS)，生产环境也必须使用相对路径。
+  // 请在部署的 Nginx 服务器中配置反向代理，将 /api/v1/ai/ 代理至 http://173.3.2.36:15050
   return request<GuideChatResponse>('/api/v1/ai/guide', {
     method: 'POST',
     data,

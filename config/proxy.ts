@@ -13,7 +13,7 @@ export default {
   // 如果需要自定义本地开发服务器  请取消注释按需调整
   dev: {
     '/api/v1/ai/': {
-      target: 'http://173.3.2.36:15050',
+      target: 'http://10.20.20.238:48081',
       changeOrigin: true,
       proxyTimeout: 120000,
       timeout: 120000,
